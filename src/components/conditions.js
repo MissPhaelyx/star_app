@@ -10,6 +10,8 @@ import MoonPhase from './moon-phase.js';
 import SunDisplay from './sun-display.js';
 import DateTimeDisplay from './date-time-display.js';
 import ForecastItem from './forecast-item.js';
+import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class WeatherConditions extends Component{
     constructor(props){
@@ -18,7 +20,8 @@ class WeatherConditions extends Component{
             weatherData : props.weatherData,
             config: props.config,
             dateTime: props.dateTime,
-            forecastItems: props.forecastItems
+            forecastItems: props.forecastItems,
+            switchScreen: props.switchScreen
         };
     }
 
@@ -34,8 +37,12 @@ class WeatherConditions extends Component{
                 config = {this.props.config}
             />
         ));
+        const panelClass = this.props.show ?
+            "screen flex flex-columns centre collapse" :
+            "screen flex flex-columns centre collapse hide";
         return(
-                <div id="main-panel" className="screen flex flex-columns centre collapse"> 
+            <div id="main-panel" className={panelClass}> 
+                <button id="toggle-config" className="button" onClick={() => this.props.switchScreen("CONFIG")}><FontAwesomeIcon icon={faCog} /></button>
                 <span>{this.props.weatherData.location}</span>
                 <div id="date-time-panel" className="panel large-font">
                     <DateTimeDisplay

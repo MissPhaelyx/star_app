@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 import React, {Component} from 'react';
 import WeatherConditions from './components/conditions';
+import ConfigScreen from './components/config-screen';
 import './App.css';
 import './style.css';
 import './weather-icons.min.css';
@@ -9,6 +10,7 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state = {
+      currentScreen : 'MAIN',
       weatherData : {},
       cities: {},
       countries: {},
@@ -61,6 +63,12 @@ class App extends Component{
 
   metresPSToMph(windMs){
     return parseFloat(windMs * 2.237).toFixed(2);
+  }
+
+  switchScreen(screenName){
+    this.setState({
+      currentScreen: screenName
+    });
   }
 
   unixToTimeString(unixTimeStamp){
@@ -136,12 +144,21 @@ class App extends Component{
     const backgroundColour = { backgroundColor : '#FF8080' }
     return(
       <div className='wrapper noselect'>
-        <div className='container centre' style={backgroundColour}>
+       
+        <div className='container centre' style={backgroundColour}>          
           <WeatherConditions
             weatherData = {this.state.weatherData}
             config = {this.state.config}
             dateTime = {this.state.dateTime}
             forecastItems = {this.state.forecastItems}
+            show = {this.state.currentScreen === "MAIN"}
+            switchScreen = {(screenName) => this.switchScreen(screenName)}
+          />
+          <ConfigScreen
+            config = {this.state.config}
+            dateTime = {this.state.dateTime}
+            show = {this.state.currentScreen === "CONFIG"}
+            switchScreen = {(screenName) => this.switchScreen(screenName)}
           />
         </div>
       </div>
