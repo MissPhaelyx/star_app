@@ -4,8 +4,12 @@ import React, {Component} from 'react';
 import ConditionIcon from './condition-icon.js';
 import WindDisplay from './wind-display.js';
 import TemperatureDisplay from './temperature-display.js';
+import TemperatureExtras from './temperature-extras.js';
+import ConditionsExtras from './conditions-extras.js';
 import MoonPhase from './moon-phase.js';
 import SunDisplay from './sun-display.js';
+import DateTimeDisplay from './date-time-display.js';
+import ForecastItem from './forecast-item.js';
 
 class WeatherConditions extends Component{
     constructor(props){
@@ -13,60 +17,75 @@ class WeatherConditions extends Component{
         this.state = {
             weatherData : props.weatherData,
             config: props.config,
-            conditionIcon: props.coniditionIcon
+            dateTime: props.dateTime,
+            forecastItems: props.forecastItems
         };
     }
 
+    getDynamicColour(){
+        return '#f00';
+    }
+
     render(){
+        const forecastPanel = this.props.forecastItems.map((forecast) => (
+            <ForecastItem 
+                key={forecast.key} 
+                weatherData = {forecast}
+                config = {this.props.config}
+            />
+        ));
         return(
-            <div id="main-panel" className="panel flex flex-columns centre collapse">         
-                <div id="location" className="panel flex flex-rows centre">
-                    <span>{this.props.weatherData.location}</span>
-                </div>                
-                <div id="weather-container" className="panel flex flex-columns centre min">
+                <div id="main-panel" className="screen flex flex-columns centre collapse"> 
+                <span>{this.props.weatherData.location}</span>
+                <div id="date-time-panel" className="panel large-font">
+                    <DateTimeDisplay
+                        dateTime = {this.props.dateTime}
+                        showDay = {true}
+                        showDate={true}
+                    />
+                </div>  
+                <div id="weather-panel" className="panel flex flex-columns centre">
                     <ConditionIcon conditionId = {this.props.weatherData.conditionId} />                        
                     <TemperatureDisplay
                         temperature = {this.props.weatherData.temp}
                         temperatureUnit = {this.props.config.tempUnit}
                     />                  
-                    <WindDisplay
-                        windSpeed={this.props.weatherData.windSpeed}
-                        windDirection={this.props.weatherData.windDirection}
-                        speedUnit={this.props.config.windSpeedUnit}
-                    />                    
-                </div>                
-                <div id="time-container" className="panel flex flex-columns centre max">
-                    <span className="day"></span>
-                    <span className="date"></span>
-                    <span className="time"></span>
-                </div>  
-                <div id="forecast-container" className="panel flex flex-rows centre forecast">
                     
-                </div>
-                <div id="sun-container" className="panel flex flex-rows centre min">
-                    <div id="extras-panel" className="flex flex-columns centre extra">
-                        <div>
-                            Feels like: <span id="feels-like">{this.props.weatherData.feelsLike}{this.props.config.tempUnit}</span> &#9830;
-                            High: <span id="temp-high">{this.props.weatherData.highTemp}{this.props.config.tempUnit}</span> &#9830;
-                            Low: <span id="temp-low">{this.props.weatherData.lowTemp}{this.props.config.tempUnit}</span>
-                        </div>
-                        <div>
-                            Humidity: <span id="humidity">{this.props.weatherData.humidity}{this.props.config.humidityUnit}</span> &#9830;
-                            Pressure: <span id="pressure">{this.props.weatherData.pressure}{this.props.config.pressureUnit}</span>                                              
-                        </div>
+                    <div className="flex flex-columns centre small-font">   
+                        <WindDisplay
+                            windSpeed={this.props.weatherData.windSpeed}
+                            windDirection={this.props.weatherData.windDirection}
+                            speedUnit={this.props.config.windSpeedUnit}
+                        /> 
+                        <TemperatureExtras
+                            tempUnit = {this.props.config.tempUnit}
+                            feelsLike = {this.props.weatherData.feelsLike}
+                            temperatureLow = {this.props.weatherData.lowTemp}
+                            temperatureHigh = {this.props.weatherData.highTemp}
+                        />     
+                        <ConditionsExtras
+                            humidity = {this.props.weatherData.humidity}
+                            pressure = {this.props.weatherData.pressure}                
+                            pressureUnit = {this.props.config.pressureUnit}
+                        />  
                     </div>
-                    <MoonPhase
-                        date = {new Date()}
-                     />
-                     <SunDisplay
-                        isSunSet = {false}
-                        time = {this.props.weatherData.sunriseTime}
-                     />
-                     <SunDisplay
-                        isSunSet = {true}
-                        time = {this.props.weatherData.sunsetTime}
-                     />                    
-                </div>          
+                    <div className="flex flex-rows centre small-font">
+                        <MoonPhase
+                            date = {new Date()}
+                        />
+                        <SunDisplay
+                            isSunSet = {false}
+                            time = {this.props.weatherData.sunriseTime}
+                        />
+                        <SunDisplay
+                            isSunSet = {true}
+                            time = {this.props.weatherData.sunsetTime}
+                        />    
+                    </div>                 
+                </div>  
+                <div id="forecast-panel" className="panel flex flex-rows centre forecast tiny-font">
+                    {forecastPanel}
+                </div>                    
             </div> 
         )
     }

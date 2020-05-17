@@ -58,11 +58,11 @@ class MoonPhase extends Component{
     
     render(){
         const phase = this.getPhase();
-        const iconClass = "wi " + phase.icon;
+        const iconClass = "moon wi " + phase.icon;
 
         return(
-            <div id="moon-panel" className="flex flex-rows centre">
-                <i id="moon-phase-icon" className={iconClass}></i>
+            <div>
+                <i className={iconClass}></i>
             </div>   
         )
     }

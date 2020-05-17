@@ -12,8 +12,8 @@ class TemperatureDisplay extends Component{
 
     render(){
         return(
-            <div id="temperature-panel" className="flex flex-rows centre">                        
-                <span id="temperature">{this.props.temperature}{this.props.temperatureUnit}</span>    
+            <div className="temperature-display flex flex-rows centre">                        
+                <span>{this.props.temperature}{this.props.temperatureUnit}</span>    
             </div>     
         )
     }

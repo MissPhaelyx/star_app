@@ -15,7 +15,7 @@ class SunDisplay extends Component{
         return(
             <div>
                 <i className={iconClass}></i>
-                <span id="rise-time">{this.props.time}</span>
+                <span>{this.props.time}</span>
             </div>
         )
     }

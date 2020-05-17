@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import WeatherConditions from './components/conditions';
 import './App.css';
+import './style.css';
 import './weather-icons.min.css';
 
 class App extends Component{
@@ -11,17 +12,47 @@ class App extends Component{
       weatherData : {},
       cities: {},
       countries: {},
+      forecastItems: [],
       config: {
         tempUnit: '°C',
         windSpeedUnit: 'mph',
-        humidityUnit: '%',
-        pressureUnit: 'hPa'
-      }
+        pressureUnit: 'hPa',
+        isDynamicColour: false,
+        staticColour: '#FF8080'
+      },
+      dateTime: new Date(),
+      dateTimeIntervalId: 0,
+      weatherIntervalId: 0,
+      forecastIntervalId: 0
     };
   }
 
   componentDidMount(){
-    this.getWeatherData(2641181);
+    this.getWeatherData(2641181);   
+
+    setTimeout(() => {
+      this.getForecast(2641181);
+    }, 3000);
+
+    var dateTimeIntervalId = setInterval(() => {
+      this.setState({dateTime: new Date()});
+    }, 1000);
+
+    var weatherIntervalId = setInterval(() => {
+      this.getWeatherData(2641181);
+    }, 60000);
+
+    var forecastIntervalId = setInterval(() => {
+      this.getForecast(2641181);
+    }, 120000);
+
+    this.setState(
+      {
+        dateTimeIntervalId: dateTimeIntervalId,
+        weatherIntervalId: weatherIntervalId,
+        forecastIntervalId: forecastIntervalId
+      }
+    );
   }
 
   kelvinToCelsius(tempInKelvin){
@@ -75,14 +106,44 @@ class App extends Component{
     .catch(console.log);    
   }
 
-  render(){
+  getForecast(cityId){
+    fetch('https://api.openweathermap.org/data/2.5/forecast?id='+cityId+'&appid=8fd8712cd89f1836f2d4293cd9b2cc01', {
+      method:'GET'
+    })
+    .then(res => res.json())
+    .then((data) => {
+      this.setState(
+        {
+          forecastItems : data.list.map((forecast) => (
+            {
+              temp: this.kelvinToCelsius(forecast.main.temp),
+              highTemp: this.kelvinToCelsius(forecast.main.temp_max),
+              lowTemp: this.kelvinToCelsius(forecast.main.temp_min),
+              feelsLike: this.kelvinToCelsius(forecast.main.feels_like),
+              windSpeed: this.metresPSToMph(forecast.wind.speed),
+              windDirection: forecast.wind.deg,
+              conditionId: forecast.weather[0].id,
+              dateTime: forecast.dt,
+              key: forecast.dt
+            }
+          ))
+        }
+      );
+    });
+  }
 
+  render(){
+    const backgroundColour = { backgroundColor : '#FF8080' }
     return(
-      <div>
-        <WeatherConditions
-          weatherData = {this.state.weatherData}
-          config = {this.state.config}
-        />
+      <div className='wrapper noselect'>
+        <div className='container centre' style={backgroundColour}>
+          <WeatherConditions
+            weatherData = {this.state.weatherData}
+            config = {this.state.config}
+            dateTime = {this.state.dateTime}
+            forecastItems = {this.state.forecastItems}
+          />
+        </div>
       </div>
     );
   }

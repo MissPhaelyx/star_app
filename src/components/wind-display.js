@@ -1,8 +1,5 @@
 /*jshint esversion: 6 */
 import React, {Component} from 'react';
-import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 
 class WindDisplay extends Component{
     constructor(props){
@@ -15,10 +12,13 @@ class WindDisplay extends Component{
     }
 
     render(){
+        const arrowTransform = {
+            transform: 'rotate('+this.props.windDirection +'deg)'
+        }
         return(
-            <div id="wind-panel" className="flex flex-rows centre">
-                <FontAwesomeIcon icon={faArrowDown} transform={{rotate : this.props.windDirection}}/>
-                <span id="wind-speed">{this.props.windSpeed}{this.props.speedUnit}</span>   
+            <div className="flex flex-columns centre">
+                <i className='wi wi-direction-down' style={arrowTransform}></i>                
+                <span>{this.props.windSpeed}{this.props.speedUnit}</span>   
             </div>        
         )
     }
