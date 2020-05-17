@@ -1,0 +1,136 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 50px;
+    overflow: hidden;
+    background: #000;    
+}
+
+i{
+    padding: 5px;
+    font-size: 2em;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.wrapper{
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+    background-color: transparent;
+    align-content: center;
+}
+
+.container{    
+    color: #fff;
+    border-radius: 10em;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.screen{
+    padding:0.25em;
+}
+
+.panel{
+    padding: 10px;
+}
+
+
+
+.centre{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+#time-container span{
+    display: block;
+}
+
+.flex{
+    display: flex;
+}
+
+.flex-rows{
+    flex-direction: row;
+}
+
+.flex-columns{
+    flex-direction: column;
+}
+
+.large-font{
+    font-size: 1.75em;
+}
+
+.small-font{
+    font-size:0.5em;
+}
+
+.tiny-font{
+    font-size:0.33em;
+}
+
+.moon{
+    font-size: 2em;
+}
+
+.forecast{
+    width: 60vw;
+    min-height: 200px;
+    overflow-x: hidden;
+    justify-content: flex-start;
+    overflow-y: hidden;
+}
+
+.forecast-day{
+    display: inline-block;
+    margin: 5px;
+}
+
+.forecast-day span{
+    display: block;
+}
+
+.panel::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
+.collapse{
+    min-height: 900px;
+    transition: min-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 100;
+}
+
+.collapse.hide{
+    min-height: 0;
+    transition: min-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.collapse div.panel{
+    z-index: 9999999999;
+}
+
+#toggle-config{
+    position: absolute;
+    top: 10px;
+    right: 20px;    
+}
+
+.button{
+    color: #fff;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
