@@ -13,21 +13,7 @@ import ForecastItem from './forecast-item.js';
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-class WeatherConditions extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            weatherData : props.weatherData,
-            config: props.config,
-            dateTime: props.dateTime,
-            forecastItems: props.forecastItems,
-            switchScreen: props.switchScreen
-        };
-    }
-
-    getDynamicColour(){
-        return '#f00';
-    }
+class WeatherConditions extends Component{   
 
     render(){
         const forecastPanel = this.props.forecastItems.map((forecast) => (

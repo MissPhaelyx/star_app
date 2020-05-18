@@ -31,14 +31,15 @@ i{
 
 .container{    
     color: #fff;
-    border-radius: 10em;
+    border-radius: 5em;
     display: flex;
     flex-direction: column;
     width: 100%;
+    padding: 10px;
 }
 
 .screen{
-    padding:0.25em;
+    padding:0em;
 }
 
 .panel{
@@ -51,11 +52,9 @@ i{
     align-items: center;
 }
 
-#config-panel
-select,
-option,
-label{
-    font-size: 20px;
+.dropdown{
+    width: 50vw;
+    font-size:0.5em;
 }
 
 #time-container span{
@@ -112,8 +111,8 @@ label{
 }
 
 .collapse{   
-    min-height: 1024px;  
-    max-height: 1024px;  
+    min-height: 980px;  
+    max-height: 980px;  
     transition: min-height 0.5s ease-in-out,max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
     opacity: 100;
 }
@@ -123,6 +122,7 @@ label{
     min-height: 0;
     transition: min-height 0.5s ease-in-out,max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
     opacity: 0;
+    pointer-events: none;
 }
 
 .collapse div.panel{
@@ -131,8 +131,8 @@ label{
 
 #toggle-config{
     position: absolute;
-    top: 10px;
-    right: 20px;    
+    bottom: 30px;
+    right: 30px;    
 }
 
 .button{
@@ -142,3 +142,22 @@ label{
     cursor: pointer;
     font-size: 1em;
 }
+
+.colour-picker{
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    width: 56px;
+    height: 56px;
+    border: none;
+    cursor: pointer;
+}
+
+.colour-input-container {
+    position: relative;
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    border: solid 2px #ddd;
+    border-radius: 40px;
+  }

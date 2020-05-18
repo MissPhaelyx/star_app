@@ -12,32 +12,39 @@ class App extends Component{
     this.state = {
       currentScreen : 'MAIN',
       weatherData : {},
-      cities: {},
-      countries: {},
+      cities: [],
+      countries: [],
       forecastItems: [],
       config: {
         tempUnit: '°C',
         windSpeedUnit: 'mph',
         pressureUnit: 'hPa',
-        isDynamicColour: false,
-        staticColour: '#FF8080'
+        colourScheme: "2",
+        staticColour: '#FF8080',    
+        selectedCountry: 'GB' , 
+        selectedCity: "2641181"
       },
       dateTime: new Date(),
       dateTimeIntervalId: 0,
       weatherIntervalId: 0,
-      forecastIntervalId: 0
+      forecastIntervalId: 0,
+      currentDynamicColour: '#000'
     };
   }
 
   componentDidMount(){
-    this.getWeatherData(2641181);   
+    this.getCountryData();
+    this.getCityData(this.state.config.selectedCountry);
 
+    this.getWeatherData(this.state.config.selectedCity);   
+    
     setTimeout(() => {
-      this.getForecast(2641181);
+      this.getForecast(this.state.config.selectedCity);
     }, 3000);
 
     var dateTimeIntervalId = setInterval(() => {
       this.setState({dateTime: new Date()});
+      this.setDynamicColour();
     }, 1000);
 
     var weatherIntervalId = setInterval(() => {
@@ -55,6 +62,25 @@ class App extends Component{
         forecastIntervalId: forecastIntervalId
       }
     );
+  }
+
+  setDynamicColour(){
+    var date = this.state.dateTime;
+    var datePart = date.getDate() + '' + date.getMonth() + 1 + '' + date.getHours();
+    var conditionAddition = parseInt(this.state.weatherData.conditionId) * 1000;
+    var dynamicValue = datePart + conditionAddition;
+
+     // Parse string as Base16 (hex)
+    var hex = parseInt(dynamicValue, 10).toString(16);   
+    
+    // If it's less than six, trim it to three
+    if ( hex.length < 7 ) {
+        hex = hex.substring(0,3);
+    }
+    // Limit it to six chars for CSS styles
+    var dynamicColour = '#' + hex.substring( 1, 7 );
+
+    this.setState({currentDynamicColour: dynamicColour});
   }
 
   kelvinToCelsius(tempInKelvin){
@@ -83,6 +109,42 @@ class App extends Component{
 
     // Will display time in 10:30:23 format
     return hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+  }
+
+  getCountryData(){
+    fetch('https://phaepeeeye.herokuapp.com/countries',{
+      method:'GET'
+    })
+    .then(res => res.json())
+    .then((data) => {
+      this.setState(
+        {  
+          countries : data
+        });
+
+    })
+    .catch(console.log);    
+  }
+
+  getCityData(country){
+    fetch('https://phaepeeeye.herokuapp.com/cities?country='+country,{
+      method:'GET'
+    })
+    .then(res => res.json())
+    .then((data) => {
+      this.setState(
+        {  
+          cities : data.map((city) => (
+            {
+              _id:city._id,
+              value:city.id,
+              label:city.name 
+            }
+          ))
+        });
+
+    })
+    .catch(console.log);    
   }
 
   getWeatherData(cityId){
@@ -140,12 +202,50 @@ class App extends Component{
     });
   }
 
+  setColourScheme(scheme){
+    var config = this.state.config;
+    config.colourScheme = scheme;
+    this.setState({
+      config: config
+    });
+  }
+
+  setStaticColour(colour){
+    var config = this.state.config;
+    config.staticColour = colour;
+    this.setState({
+      config: config
+    });
+  }
+
+  setCountry(country){
+    var config = this.state.config;
+    config.selectedCountry = country.country;
+    config.selectedCity = "";
+    this.setState({
+      config: config
+    });
+    this.getCityData(country.country);
+  }
+
+  setCity(city){
+     var config = this.state.config;
+    config.selectedCity = city.city;
+    this.setState({
+      config: config
+    });
+    this.getWeatherData(city.city);
+    setTimeout(() => {
+      this.getForecast(city.city);
+    }, 3000);
+  }
+
   render(){
-    const backgroundColour = { backgroundColor : '#FF8080' }
+    const backgroundColor = this.state.config.colourScheme === "1" ? this.state.currentDynamicColour : this.state.config.staticColour;
+    const containerStyle = { backgroundColor : backgroundColor }
     return(
-      <div className='wrapper noselect'>
-       
-        <div className='container centre' style={backgroundColour}>          
+      <div className='wrapper noselect'>       
+        <div className='container centre' style={containerStyle}>          
           <WeatherConditions
             weatherData = {this.state.weatherData}
             config = {this.state.config}
@@ -159,6 +259,12 @@ class App extends Component{
             dateTime = {this.state.dateTime}
             show = {this.state.currentScreen === "CONFIG"}
             switchScreen = {(screenName) => this.switchScreen(screenName)}
+            setColourScheme = {(scheme) => this.setColourScheme(scheme)}
+            setStaticColour = {(colour) => this.setStaticColour(colour)}
+            setCountry = {(country) => this.setCountry(country)}            
+            setCity = {(city) => this.setCity(city)}
+            countries = {this.state.countries}
+            cities = {this.state.cities}
           />
         </div>
       </div>
