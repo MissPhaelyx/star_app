@@ -27,6 +27,7 @@ class DropDown extends Component{
         ));
         return(
             <select className={this.props.className} key={this.props.id} id={this.props.id} value={this.state.selectedValue} onChange={(e) => this.onChange(e)}>
+                <option value="0">Please select...</option>
                 {items}
             </select>
         )

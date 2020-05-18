@@ -48,11 +48,11 @@ class App extends Component{
     }, 1000);
 
     var weatherIntervalId = setInterval(() => {
-      this.getWeatherData(2641181);
+      this.getWeatherData(this.state.config.selectedCity);
     }, 60000);
 
     var forecastIntervalId = setInterval(() => {
-      this.getForecast(2641181);
+      this.getForecast(this.state.config.selectedCity);
     }, 120000);
 
     this.setState(
