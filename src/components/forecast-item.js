@@ -7,15 +7,7 @@ import TemperatureDisplay from './temperature-display.js';
 import MoonPhase from './moon-phase.js';
 import DateTimeDisplay from './date-time-display.js';
 
-class ForecastItem extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            weatherData : props.weatherData,
-            config: props.config
-        };
-    }
-
+class ForecastItem extends Component{   
     render(){
         return(
             <div className='forecast-day'>
@@ -23,7 +15,10 @@ class ForecastItem extends Component{
                     dateTime = {new Date(this.props.weatherData.dateTime*1000)}
                     showDay = {true}
                 /> 
-                <ConditionIcon conditionId = {this.props.weatherData.conditionId} />                        
+                <ConditionIcon 
+                    conditionId = {this.props.weatherData.conditionId} 
+                    conditionToolTip = {this.props.weatherData.condition}    
+                />                        
                 <TemperatureDisplay
                     temperature = {this.props.weatherData.temp}
                     temperatureUnit = {this.props.config.tempUnit}
@@ -39,8 +34,6 @@ class ForecastItem extends Component{
             </div>
         );
     }
-
-
 }
 
 export default ForecastItem;

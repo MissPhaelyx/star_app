@@ -1,7 +1,8 @@
 /*jshint esversion: 6 */
 import React, {Component} from 'react';
-import WeatherConditions from './components/conditions';
+import WeatherScreen from './components/weather-screen';
 import ConfigScreen from './components/config-screen';
+import TodoScreen from './components/todo-screen';
 import './App.css';
 import './style.css';
 import './weather-icons.min.css';
@@ -10,11 +11,15 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state = {
-      currentScreen : 'MAIN',
+      currentScreen : 'WEATHER',
+      previousScreen: '',
       weatherData : {},
       cities: [],
       countries: [],
       forecastItems: [],
+      tasks: [],
+      filteredTasks: [],
+      tags: [],
       config: {
         tempUnit: '°C',
         windSpeedUnit: 'mph',
@@ -49,11 +54,11 @@ class App extends Component{
 
     var weatherIntervalId = setInterval(() => {
       this.getWeatherData(this.state.config.selectedCity);
-    }, 60000);
+    }, 36000);
 
     var forecastIntervalId = setInterval(() => {
       this.getForecast(this.state.config.selectedCity);
-    }, 120000);
+    }, 72000);
 
     this.setState(
       {
@@ -67,7 +72,7 @@ class App extends Component{
   setDynamicColour(){
     var date = this.state.dateTime;
     var datePart = date.getDate() + '' + date.getMonth() + 1 + '' + date.getHours();
-    var conditionAddition = parseInt(this.state.weatherData.conditionId) * 1000;
+    var conditionAddition = this.state.weatherData.conditionId * 1024;
     var dynamicValue = datePart + conditionAddition;
 
      // Parse string as Base16 (hex)
@@ -92,8 +97,10 @@ class App extends Component{
   }
 
   switchScreen(screenName){
+    let previousScreen = this.state.currentScreen;
     this.setState({
-      currentScreen: screenName
+      currentScreen: screenName,
+      previousScreen: previousScreen
     });
   }
 
@@ -147,6 +154,26 @@ class App extends Component{
     .catch(console.log);    
   }
 
+  getTasks(){
+    fetch('https://phaepeeeye.herokuapp.com/tasks', {
+      method: 'GET'
+    })
+    .then(res => res.json())
+    .then((data) => {this.setState({tasks: data, filteredTasks: data.slice().sort((a,b) => this.sortDateAscending(a,b))});})
+    .catch(console.log);
+  }
+
+  getTags(){
+    fetch('https://phaepeeeye.herokuapp.com/tags', {
+      method: 'GET'
+    })
+    .then(res => res.json())
+    .then((data) => {
+      this.setState({tags: data});
+    })
+    .catch(console.log);
+  }
+
   getWeatherData(cityId){
 
     fetch('https://api.openweathermap.org/data/2.5/weather?id='+cityId+'&appid=8fd8712cd89f1836f2d4293cd9b2cc01',{
@@ -164,6 +191,7 @@ class App extends Component{
             windSpeed: this.metresPSToMph(data.wind.speed),
             windDirection: data.wind.deg,
             conditionId: data.weather[0].id,
+            condition:data.weather[0].description,
             location: data.name,
             sunriseTime: this.unixToTimeString(data.sys.sunrise),
             sunsetTime: this.unixToTimeString(data.sys.sunset),
@@ -192,7 +220,8 @@ class App extends Component{
               feelsLike: this.kelvinToCelsius(forecast.main.feels_like),
               windSpeed: this.metresPSToMph(forecast.wind.speed),
               windDirection: forecast.wind.deg,
-              conditionId: forecast.weather[0].id,
+              conditionId: forecast.weather[0].id,              
+              condition: forecast.weather[0].description,
               dateTime: forecast.dt,
               key: forecast.dt
             }
@@ -242,16 +271,26 @@ class App extends Component{
 
   render(){
     const backgroundColor = this.state.config.colourScheme === "1" ? this.state.currentDynamicColour : this.state.config.staticColour;
-    const containerStyle = { backgroundColor : backgroundColor }
+    const containerStyle = { backgroundColor : backgroundColor };
     return(
       <div className='wrapper noselect'>       
-        <div className='container centre' style={containerStyle}>          
-          <WeatherConditions
+        <div className='container centre' style={containerStyle}> 
+          <TodoScreen
+            weatherData = {this.state.weatherData}
+            config = {this.state.config}
+            dateTime = {this.state.dateTime}            
+            show = {this.state.currentScreen === "TODO"}
+            switchScreen = {(screenName) => this.switchScreen(screenName)}
+            tasks = {this.state.tasks}
+            filteredTasks = {this.state.filteredTasks}
+            tags = {this.state.tags}
+          />                   
+          <WeatherScreen
             weatherData = {this.state.weatherData}
             config = {this.state.config}
             dateTime = {this.state.dateTime}
             forecastItems = {this.state.forecastItems}
-            show = {this.state.currentScreen === "MAIN"}
+            show = {this.state.currentScreen === "WEATHER"}
             switchScreen = {(screenName) => this.switchScreen(screenName)}
           />
           <ConfigScreen
@@ -265,6 +304,7 @@ class App extends Component{
             setCity = {(city) => this.setCity(city)}
             countries = {this.state.countries}
             cities = {this.state.cities}
+            previousScreen = {this.state.previousScreen}
           />
         </div>
       </div>

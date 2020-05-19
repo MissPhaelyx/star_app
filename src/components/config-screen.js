@@ -30,7 +30,7 @@ class ConfigScreen extends Component{
 
     render(){
         const panelClass = this.props.show ?
-            "screen flex flex-columns centre collapse" :
+            "screen flex flex-columns centre collapse show" :
             "screen flex flex-columns centre collapse hide";
         return(
             <div id="config-panel" className={panelClass}>
@@ -76,7 +76,7 @@ class ConfigScreen extends Component{
                         className = "colour-picker"
                     />               
                 </div>   
-                <button id="save-config" className="button" onClick={() => this.props.switchScreen("MAIN")}><FontAwesomeIcon icon={faSave} /></button>                
+                <button id="save-config" className="button" onClick={() => this.props.switchScreen(this.props.previousScreen)}><FontAwesomeIcon icon={faSave} /></button>                
             </div>
         )
     }

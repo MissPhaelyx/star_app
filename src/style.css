@@ -27,6 +27,7 @@ i{
     justify-content: center;
     background-color: transparent;
     align-content: center;
+    line-height: 1;
 }
 
 .container{    
@@ -34,7 +35,7 @@ i{
     border-radius: 5em;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    max-width: 100%;
     padding: 10px;
 }
 
@@ -50,6 +51,12 @@ i{
     text-align: center;
     justify-content: center;
     align-items: center;
+}
+
+.left{
+    text-align: left;
+    justify-content: left;
+    align-items: left;
 }
 
 .dropdown{
@@ -125,14 +132,28 @@ i{
     pointer-events: none;
 }
 
+.collapse.small{
+    min-height: 900px;  
+    max-height: 900px;  
+    transition: min-height 0.5s ease-in-out,max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 100;
+}
+
 .collapse div.panel{
     z-index: 9999999999;
 }
 
-#toggle-config{
+.switch-screen-button{
     position: absolute;
-    bottom: 30px;
-    right: 30px;    
+    right: 15px;
+}
+
+.switch-screen-button.top{
+    top:15px;
+}
+
+.switch-screen-button.bottom{
+    bottom: 15px;
 }
 
 .button{
@@ -160,4 +181,164 @@ i{
     height: 40px;
     border: solid 2px #ddd;
     border-radius: 40px;
+  }
+
+/* tasks needs redoing props */
+.content-panel-table{ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .content-panel-table table{
+    width: 80vw;
+  }
+  
+  .content-panel-form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .content-panel-form form{  
+    width: 80vw; 
+  }
+  
+  .form-group label{
+    margin-right: 1rem;
+  }
+  
+  .form-group input,
+  .form-group select{
+    border-width: 2px;
+    border-style: solid;
+    border-color: #000;
+    background-color: #efefef;
+    padding:1rem;
+    font-size:1rem;
+    width: 100%;
+  }
+  
+  .form-group button{
+    border: none;
+    background-color:#ff7f50;
+    color:#fff;
+    padding: 0.5rem;
+    width: 10rem;
+    margin-left: 1rem;  
+    cursor: pointer;
+  }
+  
+  .action-button{
+    border: none;
+    background: transparent;
+    padding: 1vw;
+    color:#ff7f50;
+    cursor: pointer;
+  }
+  
+  .button-column{
+    text-align: center;
+  }
+  
+  .tag-list{
+    list-style-type: none;
+  }
+  
+  .tag-list li{
+    display: inline-block;
+  }
+  
+  .tag-label{
+    margin-left: 1rem;
+    padding:0.5rem;
+    border: solid 1px;
+    color:#FFF;
+    background-color: #cdcdcd;
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */ 
+    user-select: none; /* Standard */
+  }
+  
+  .tag-list li input{
+    width: unset;
+    position: absolute;
+    left: -9999px;
+  }
+  
+  input:checked + label {
+    background-color: #ff7f50;
+    color: #FFF;
+  }
+  
+  td .tag-label{
+    display: inline-block;
+    background-color: #ff7f50;
+    color: #FFF;  
+    cursor: default;
+  }
+  
+  tfoot{
+    text-align: left;
+  }
+  
+  .sortButton{
+    background-color: #FFF;
+    color: #ff7f50;
+    border:none;
+  }
+  
+  button:active, button:focus {
+    outline: none;
+    border: none;
+  }
+  
+  
+  
+  .table-tools-row{
+    text-align: left;
+    padding: 1rem;
+  }
+  
+  label{
+    margin-right:1rem;
+  }
+  
+  .tools-wrapper{
+    display: flex;
+    width: 80vw;
+    justify-content: flex-end;
+  }
+  
+  .tools-wrapper .form-group{
+    margin-left: 2vw;
+  }
+  
+  .tools-wrapper .form-group input,
+  .tools-wrapper .form-group select{
+    width: unset;
+    padding: 0.5rem;
+  }
+  
+  .tools-wrapper div:first-child{
+    margin-right: auto;
+    margin-left: unset;
+  }
+  
+  .collapse-panel{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease-out;  
+  }
+  
+  .collapse-panel.active{
+    max-height: 1200px;
+    transition: max-height 0.5s ease-in-out;
+    padding: 1rem;
+  }
+  
+  button[type="reset"]{
+    background-color: #cdcdcd;
   }

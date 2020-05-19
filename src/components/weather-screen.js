@@ -11,9 +11,10 @@ import SunDisplay from './sun-display.js';
 import DateTimeDisplay from './date-time-display.js';
 import ForecastItem from './forecast-item.js';
 import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-class WeatherConditions extends Component{   
+class WeatherScreen extends Component{   
 
     render(){
         const forecastPanel = this.props.forecastItems.map((forecast) => (
@@ -24,11 +25,12 @@ class WeatherConditions extends Component{
             />
         ));
         const panelClass = this.props.show ?
-            "screen flex flex-columns centre collapse" :
+            "screen flex flex-columns centre collapse show" :
             "screen flex flex-columns centre collapse hide";
         return(
             <div id="main-panel" className={panelClass}> 
-                <button id="toggle-config" className="button" onClick={() => this.props.switchScreen("CONFIG")}><FontAwesomeIcon icon={faCog} /></button>
+                <button className="button switch-screen-button bottom" onClick={() => this.props.switchScreen("CONFIG")}><FontAwesomeIcon icon={faCog} /></button>
+                <button className="button switch-screen-button top" onClick={() => this.props.switchScreen("TODO")}><FontAwesomeIcon icon={faCalendar} /></button>
                 <span>{this.props.weatherData.location}</span>
                 <div id="date-time-panel" className="panel large-font">
                     <DateTimeDisplay
@@ -38,7 +40,10 @@ class WeatherConditions extends Component{
                     />
                 </div>  
                 <div id="weather-panel" className="panel flex flex-columns centre">
-                    <ConditionIcon conditionId = {this.props.weatherData.conditionId} />                        
+                    <ConditionIcon 
+                        conditionId = {this.props.weatherData.conditionId} 
+                        conditionToolTip = {this.props.weatherData.condition}
+                    />                        
                     <TemperatureDisplay
                         temperature = {this.props.weatherData.temp}
                         temperatureUnit = {this.props.config.tempUnit}
@@ -84,4 +89,4 @@ class WeatherConditions extends Component{
     }
 }
 
-export default WeatherConditions;
+export default WeatherScreen;

@@ -79,7 +79,7 @@ class ConditionIcon extends Component{
         const iconClass = 'wi ' + this.getIcon(this.props.conditionId);
 
         return(
-            <i className={iconClass}></i>
+            <i className={iconClass} title={this.props.conditionToolTip}></i>
         )
     }
 }

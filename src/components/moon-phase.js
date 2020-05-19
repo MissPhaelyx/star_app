@@ -62,7 +62,7 @@ class MoonPhase extends Component{
 
         return(
             <div>
-                <i className={iconClass}></i>
+                <i className={iconClass} title={phase.tooltip}></i>
             </div>   
         )
     }
