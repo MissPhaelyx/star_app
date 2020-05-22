@@ -18,7 +18,6 @@ class App extends Component{
       countries: [],
       forecastItems: [],
       tasks: [],
-      filteredTasks: [],
       tags: [],
       config: {
         tempUnit: '°C',
@@ -42,7 +41,7 @@ class App extends Component{
     this.getCityData(this.state.config.selectedCountry);
 
     this.getWeatherData(this.state.config.selectedCity);   
-    
+
     setTimeout(() => {
       this.getForecast(this.state.config.selectedCity);
     }, 3000);
@@ -154,25 +153,7 @@ class App extends Component{
     .catch(console.log);    
   }
 
-  getTasks(){
-    fetch('https://phaepeeeye.herokuapp.com/tasks', {
-      method: 'GET'
-    })
-    .then(res => res.json())
-    .then((data) => {this.setState({tasks: data, filteredTasks: data.slice().sort((a,b) => this.sortDateAscending(a,b))});})
-    .catch(console.log);
-  }
-
-  getTags(){
-    fetch('https://phaepeeeye.herokuapp.com/tags', {
-      method: 'GET'
-    })
-    .then(res => res.json())
-    .then((data) => {
-      this.setState({tags: data});
-    })
-    .catch(console.log);
-  }
+ 
 
   getWeatherData(cityId){
 
@@ -229,7 +210,9 @@ class App extends Component{
         }
       );
     });
-  }
+  } 
+
+  
 
   setColourScheme(scheme){
     var config = this.state.config;
@@ -280,10 +263,10 @@ class App extends Component{
             config = {this.state.config}
             dateTime = {this.state.dateTime}            
             show = {this.state.currentScreen === "TODO"}
-            switchScreen = {(screenName) => this.switchScreen(screenName)}
-            tasks = {this.state.tasks}
-            filteredTasks = {this.state.filteredTasks}
-            tags = {this.state.tags}
+            switchScreen = {(screenName) => this.switchScreen(screenName)}            
+            handleSubmit={(values) => this.handleSubmit(values)}
+            loadTasks = {() => this.getTasks()}
+            loadTags = {() => this.getTags()}
           />                   
           <WeatherScreen
             weatherData = {this.state.weatherData}

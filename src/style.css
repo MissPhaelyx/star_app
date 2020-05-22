@@ -41,10 +41,11 @@ i{
 
 .screen{
     padding:0em;
+    width: 100vw;
 }
 
 .panel{
-    padding: 10px;
+    padding: 10px;    
 }
 
 .centre{
@@ -122,6 +123,7 @@ i{
     max-height: 980px;  
     transition: min-height 0.5s ease-in-out,max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
     opacity: 100;
+    width: 80%
 }
 
 .collapse.hide{
@@ -137,6 +139,7 @@ i{
     max-height: 900px;  
     transition: min-height 0.5s ease-in-out,max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
     opacity: 100;
+    width: 100%
 }
 
 .collapse div.panel{
@@ -183,6 +186,11 @@ i{
     border-radius: 40px;
   }
 
+  .status-small{
+    padding: 1em;
+    width: 85vw;
+  }
+
 /* tasks needs redoing props */
 .content-panel-table{ 
     display: flex;
@@ -191,7 +199,7 @@ i{
   }
   
   .content-panel-table table{
-    width: 80vw;
+   
   }
   
   .content-panel-form{
@@ -201,7 +209,7 @@ i{
   }
   
   .content-panel-form form{  
-    width: 80vw; 
+    
   }
   
   .form-group label{
@@ -233,7 +241,7 @@ i{
     border: none;
     background: transparent;
     padding: 1vw;
-    color:#ff7f50;
+    color:#fff;
     cursor: pointer;
   }
   
@@ -250,7 +258,7 @@ i{
   }
   
   .tag-label{
-    margin-left: 1rem;
+    margin-left: 0.5rem;
     padding:0.5rem;
     border: solid 1px;
     color:#FFF;
@@ -285,9 +293,10 @@ i{
   }
   
   .sortButton{
-    background-color: #FFF;
-    color: #ff7f50;
+    background-color: transparent;
+    color: #fff;
     border:none;
+    cursor: pointer;
   }
   
   button:active, button:focus {
@@ -307,8 +316,7 @@ i{
   }
   
   .tools-wrapper{
-    display: flex;
-    width: 80vw;
+    display: flex;    
     justify-content: flex-end;
   }
   
@@ -341,4 +349,8 @@ i{
   
   button[type="reset"]{
     background-color: #cdcdcd;
+  }
+
+  .hide{
+    display: none;
   }
