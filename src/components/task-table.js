@@ -126,8 +126,8 @@ class TaskTable extends React.Component{
             <TagCheckBox
                 key = {tag._id}
                 tag = {tag}
-                addTag = {(tag) => this.addTag(tag)}
-                removeTag = {(tag) => this.removeTag(tag)}
+                addTag = {(tag) => this.onAddTag(tag)}
+                removeTag = {(tag) => this.onRemoveTag(tag)}
                 parent = "form"
             />
         )    
@@ -202,6 +202,8 @@ class TaskRow extends React.Component{
             "_id": this.state._id,
             "name": this.state.name,
             "Create_date": this.state.Create_date,
+            "tags": this.state.tags,
+            "due_date": this.state.due_date,
             "status": [status]
         }
 

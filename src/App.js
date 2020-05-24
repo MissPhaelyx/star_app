@@ -6,6 +6,13 @@ import TodoScreen from './components/todo-screen';
 import './App.css';
 import './style.css';
 import './weather-icons.min.css';
+import { 
+  getTasks,
+  getTags,
+  getCountryData,
+  getForecast,
+  getWeatherData,
+  getCityData } from "./lib/data";
 
 class App extends Component{
   constructor(props){
@@ -36,14 +43,19 @@ class App extends Component{
     };
   }
 
-  componentDidMount(){
-    this.getCountryData();
-    this.getCityData(this.state.config.selectedCountry);
+  dataCallback = (data) => {
+    this.setState(data);
+  }
 
-    this.getWeatherData(this.state.config.selectedCity);   
+  componentDidMount(){
+    getTasks(this.dataCallback);
+    getTags(this.dataCallback);
+    getCountryData(this.dataCallback);
+    getCityData(this.dataCallback,this.state.config.selectedCountry);
+    getWeatherData(this.dataCallback,this.state.config.selectedCity);   
 
     setTimeout(() => {
-      this.getForecast(this.state.config.selectedCity);
+      getForecast(this.dataCallback,this.state.config.selectedCity);
     }, 3000);
 
     var dateTimeIntervalId = setInterval(() => {
@@ -52,15 +64,15 @@ class App extends Component{
     }, 1000);
 
     var weatherIntervalId = setInterval(() => {
-      this.getWeatherData(this.state.config.selectedCity);
-    }, 36000);
+      getWeatherData(this.dataCallback, this.state.config.selectedCity);
+    }, 360000);
 
     var forecastIntervalId = setInterval(() => {
-      this.getForecast(this.state.config.selectedCity);
-    }, 72000);
+      getForecast(this.dataCallback, this.state.config.selectedCity);
+    }, 5400000);
 
     this.setState(
-      {
+      {        
         dateTimeIntervalId: dateTimeIntervalId,
         weatherIntervalId: weatherIntervalId,
         forecastIntervalId: forecastIntervalId
@@ -87,13 +99,7 @@ class App extends Component{
     this.setState({currentDynamicColour: dynamicColour});
   }
 
-  kelvinToCelsius(tempInKelvin){
-    return parseFloat(tempInKelvin - 273.15).toFixed(1);
-  }
-
-  metresPSToMph(windMs){
-    return parseFloat(windMs * 2.237).toFixed(2);
-  }
+  
 
   switchScreen(screenName){
     let previousScreen = this.state.currentScreen;
@@ -101,118 +107,7 @@ class App extends Component{
       currentScreen: screenName,
       previousScreen: previousScreen
     });
-  }
-
-  unixToTimeString(unixTimeStamp){
-    // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-    var date = new Date(unixTimeStamp*1000);
-    // Hours part from the timestamp
-    var hours = "0" + date.getHours();
-    // Minutes part from the timestamp
-    var minutes = "0" + date.getMinutes();
-    // Seconds part from the timestamp
-    var seconds = "0" + date.getSeconds();
-
-    // Will display time in 10:30:23 format
-    return hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-  }
-
-  getCountryData(){
-    fetch('https://phaepeeeye.herokuapp.com/countries',{
-      method:'GET'
-    })
-    .then(res => res.json())
-    .then((data) => {
-      this.setState(
-        {  
-          countries : data
-        });
-
-    })
-    .catch(console.log);    
-  }
-
-  getCityData(country){
-    fetch('https://phaepeeeye.herokuapp.com/cities?country='+country,{
-      method:'GET'
-    })
-    .then(res => res.json())
-    .then((data) => {
-      this.setState(
-        {  
-          cities : data.map((city) => (
-            {
-              _id:city._id,
-              value:city.id,
-              label:city.name 
-            }
-          ))
-        });
-
-    })
-    .catch(console.log);    
-  }
-
- 
-
-  getWeatherData(cityId){
-
-    fetch('https://api.openweathermap.org/data/2.5/weather?id='+cityId+'&appid=8fd8712cd89f1836f2d4293cd9b2cc01',{
-      method:'GET'
-    })
-    .then(res => res.json())
-    .then((data) => {
-      this.setState(
-        {  
-          weatherData : {
-            temp: this.kelvinToCelsius(data.main.temp),
-            highTemp: this.kelvinToCelsius(data.main.temp_max),
-            lowTemp: this.kelvinToCelsius(data.main.temp_min),
-            feelsLike: this.kelvinToCelsius(data.main.feels_like),
-            windSpeed: this.metresPSToMph(data.wind.speed),
-            windDirection: data.wind.deg,
-            conditionId: data.weather[0].id,
-            condition:data.weather[0].description,
-            location: data.name,
-            sunriseTime: this.unixToTimeString(data.sys.sunrise),
-            sunsetTime: this.unixToTimeString(data.sys.sunset),
-            pressure: data.main.pressure,
-            humidity: data.main.humidity,
-          }
-        });
-
-    })
-    .catch(console.log);    
-  }
-
-  getForecast(cityId){
-    fetch('https://api.openweathermap.org/data/2.5/forecast?id='+cityId+'&appid=8fd8712cd89f1836f2d4293cd9b2cc01', {
-      method:'GET'
-    })
-    .then(res => res.json())
-    .then((data) => {
-      this.setState(
-        {
-          forecastItems : data.list.map((forecast) => (
-            {
-              temp: this.kelvinToCelsius(forecast.main.temp),
-              highTemp: this.kelvinToCelsius(forecast.main.temp_max),
-              lowTemp: this.kelvinToCelsius(forecast.main.temp_min),
-              feelsLike: this.kelvinToCelsius(forecast.main.feels_like),
-              windSpeed: this.metresPSToMph(forecast.wind.speed),
-              windDirection: forecast.wind.deg,
-              conditionId: forecast.weather[0].id,              
-              condition: forecast.weather[0].description,
-              dateTime: forecast.dt,
-              key: forecast.dt
-            }
-          ))
-        }
-      );
-    });
-  } 
-
-  
+  }  
 
   setColourScheme(scheme){
     var config = this.state.config;
@@ -237,7 +132,7 @@ class App extends Component{
     this.setState({
       config: config
     });
-    this.getCityData(country.country);
+    getCityData(this.dataCallback,country.country);
   }
 
   setCity(city){
@@ -246,9 +141,9 @@ class App extends Component{
     this.setState({
       config: config
     });
-    this.getWeatherData(city.city);
+    getWeatherData(this.dataCallback,city.city);
     setTimeout(() => {
-      this.getForecast(city.city);
+      this.getForecast(this.dataCallback,city.city);
     }, 3000);
   }
 
@@ -265,8 +160,8 @@ class App extends Component{
             show = {this.state.currentScreen === "TODO"}
             switchScreen = {(screenName) => this.switchScreen(screenName)}            
             handleSubmit={(values) => this.handleSubmit(values)}
-            loadTasks = {() => this.getTasks()}
-            loadTags = {() => this.getTags()}
+            tasks ={this.state.tasks}
+            tags={this.state.tags}
           />                   
           <WeatherScreen
             weatherData = {this.state.weatherData}

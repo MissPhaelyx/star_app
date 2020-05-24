@@ -36,6 +36,7 @@ class TodaysTasks extends Component{
     componentDidMount(){
         this.getTodaysTasks();
         this.getTags();
+        console.log("agenda mount");
     }  
 
     handleDelete(id){

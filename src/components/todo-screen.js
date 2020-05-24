@@ -7,6 +7,7 @@ import TaskTable from './task-table.js';
 import TaskForm from './task-form.js';
 import { faUmbrella, faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { removeByAttr } from "../lib/util";
 
 class TodoScreen extends Component{
 
@@ -17,28 +18,7 @@ class TodoScreen extends Component{
             tasks:[],
             tags:[],
         }
-    }
-
-     getTasks(){
-        fetch('https://phaepeeeye.herokuapp.com/tasks', {
-        method: 'GET'
-        })
-        .then(res => res.json())
-        .then((data) => {
-            this.setState({tasks: data});})
-        .catch(console.log);
-    }
-
-    getTags(){
-        fetch('https://phaepeeeye.herokuapp.com/tags', {
-        method: 'GET'
-        })
-        .then(res => res.json())
-        .then((data) => {
-            this.setState({tags: data});
-        })
-        .catch(console.log);
-    }
+    }    
 
     handleSubmit(task){
         fetch('https://phaepeeeye.herokuapp.com/tasks', {
@@ -49,8 +29,8 @@ class TodoScreen extends Component{
         },
         body: JSON.stringify(task,null,2)
         })
-        .then(() => this.getTasks())
-        .then(this.setState({activePanel:"list"}))
+        .then(() => this.addTask(task))
+        .then(() => this.setState({activePanel:"list"}))
         .catch(console.log);
     }
 
@@ -62,7 +42,7 @@ class TodoScreen extends Component{
             'Content-Type': 'application/json',
         },
         })
-        .then(() => this.getTasks())
+        .then(() => this.removeTask(id))
         .catch(console.log);
     }
 
@@ -75,14 +55,27 @@ class TodoScreen extends Component{
         },
         body: JSON.stringify(task,null,2)
         })
-        .then(() => this.getTasks())
+        .then(() => this.removeTask(task._id))
+        .then(() => this.addTask(task))
         .catch(console.log);
     }
 
-    componentDidMount(){
-        this.getTasks();
-        this.getTags();
-    }  
+    addTask(task){
+        let tasksClone = this.state.tasks.slice();
+        tasksClone.push(task);
+        this.setState({
+            tasks: tasksClone
+        });
+    }
+
+    removeTask(id){    
+
+        let tasksClone = removeByAttr(this.state.tasks.slice(),"_id", id);     
+
+        this.setState({
+            tasks: tasksClone
+        });
+    }
    
 
     activatePanel(panel){
@@ -121,8 +114,8 @@ class TodoScreen extends Component{
                     activatePanel = {(panel) => this.activatePanel(panel)}
                 />             
                 <TaskTable 
-                    tasks ={this.state.tasks}                     
-                    tags = {this.state.tags}   
+                    tasks ={this.props.tasks}                     
+                    tags = {this.props.tags}   
                     activePanel = {this.state.activePanel}
                     activatePanel = {(panel) => this.activatePanel(panel)}
                     onDelete = {(task) => this.handleDelete(task)}
