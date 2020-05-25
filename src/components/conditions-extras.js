@@ -13,10 +13,10 @@ class ConditionsExtras extends Component{
 
     render(){
         return(
-            <div>               
-                <span>Humidity: {this.props.humidity}% &#9830; </span>                
-                <span>Pressure: {this.props.pressure} {this.props.pressureUnit}</span>                                     
-            </div>   
+            <>               
+                <div className="extra-item"><label>Humidity</label><span>{this.props.humidity}% </span></div>              
+                <div className="extra-item"><label>Pressure</label><span>{this.props.pressure} {this.props.pressureUnit}</span></div>
+            </>   
         )
     }
 }

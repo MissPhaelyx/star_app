@@ -7,80 +7,26 @@ import TaskTable from './task-table.js';
 import TaskForm from './task-form.js';
 import { faUmbrella, faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { removeByAttr } from "../lib/util";
 
 class TodoScreen extends Component{
 
     constructor(props){
         super(props);      
         this.state = {
-            activePanel:"list",
-            tasks:[],
-            tags:[],
+            activePanel:"list"
         }
     }    
-
-    handleSubmit(task){
-        fetch('https://phaepeeeye.herokuapp.com/tasks', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(task,null,2)
-        })
-        .then(() => this.addTask(task))
-        .then(() => this.setState({activePanel:"list"}))
-        .catch(console.log);
-    }
-
-    handleDelete(id){
-        fetch('https://phaepeeeye.herokuapp.com/tasks/'+id, {
-        method: 'DELETE',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        })
-        .then(() => this.removeTask(id))
-        .catch(console.log);
-    }
-
-    handleUpdate(task){
-        fetch('https://phaepeeeye.herokuapp.com/tasks/'+task._id, {
-        method: 'PUT',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(task,null,2)
-        })
-        .then(() => this.removeTask(task._id))
-        .then(() => this.addTask(task))
-        .catch(console.log);
-    }
-
-    addTask(task){
-        let tasksClone = this.state.tasks.slice();
-        tasksClone.push(task);
-        this.setState({
-            tasks: tasksClone
-        });
-    }
-
-    removeTask(id){    
-
-        let tasksClone = removeByAttr(this.state.tasks.slice(),"_id", id);     
-
-        this.setState({
-            tasks: tasksClone
-        });
-    }
-   
 
     activatePanel(panel){
         this.setState({
             activePanel: panel
+        });
+    }
+
+    doSubmit = (task) =>{
+        this.props.handleSubmit(task);
+        this.setState({
+            activePanel:"list"
         });
     }
 
@@ -108,8 +54,8 @@ class TodoScreen extends Component{
                     />     
                 </div>   
                 <TaskForm
-                    onSubmit={(values) => this.handleSubmit(values)} 
-                    tags ={this.state.tags}          
+                    onSubmit={(task) => this.doSubmit(task) } 
+                    tags ={this.props.tags}          
                     activePanel = {this.state.activePanel}
                     activatePanel = {(panel) => this.activatePanel(panel)}
                 />             
@@ -118,8 +64,8 @@ class TodoScreen extends Component{
                     tags = {this.props.tags}   
                     activePanel = {this.state.activePanel}
                     activatePanel = {(panel) => this.activatePanel(panel)}
-                    onDelete = {(task) => this.handleDelete(task)}
-                    onUpdate = {(id) => this.handleUpdate(id)}   
+                    onDelete = {(task) => this.props.handleDelete(task)}
+                    onUpdate = {(id) => this.props.handleUpdate(id)}   
                     switchable = {true}
                     showDate = {true}
                 />  

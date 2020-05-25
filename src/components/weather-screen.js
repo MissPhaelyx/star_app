@@ -10,7 +10,7 @@ import MoonPhase from './moon-phase.js';
 import SunDisplay from './sun-display.js';
 import DateTimeDisplay from './date-time-display.js';
 import ForecastItem from './forecast-item.js';
-import TodaysTasks from './todays-tasks.js';
+import TaskTable from './task-table.js';
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -40,10 +40,8 @@ class WeatherScreen extends Component{
                         showDate={true}
                     />
                 </div>  
-                <div id="today-panel" className="panel flex flex-rows left">
-                    <TodaysTasks
-                    />
-                    <div id="weather-panel" className="flex flex-columns centre">                
+                <div id="today-panel" className="panel flex flex-rows centre">                    
+                    <div id="weather-panel" className="half-panel flex flex-columns centre">                
                         <ConditionIcon 
                             conditionId = {this.props.weatherData.conditionId} 
                             conditionToolTip = {this.props.weatherData.condition}
@@ -59,6 +57,8 @@ class WeatherScreen extends Component{
                                 windDirection={this.props.weatherData.windDirection}
                                 speedUnit={this.props.config.windSpeedUnit}
                             /> 
+                        </div>
+                        <div className="flex flex-rows centre small-font extra-display">
                             <TemperatureExtras
                                 tempUnit = {this.props.config.tempUnit}
                                 feelsLike = {this.props.weatherData.feelsLike}
@@ -71,7 +71,7 @@ class WeatherScreen extends Component{
                                 pressureUnit = {this.props.config.pressureUnit}
                             />  
                         </div>
-                        <div className="flex flex-rows centre small-font">
+                        <div className="flex flex-rows centre small-font  extra-display">
                             <MoonPhase
                                 date = {new Date()}
                             />
@@ -85,6 +85,16 @@ class WeatherScreen extends Component{
                             />    
                         </div>                 
                     </div>  
+                    <div id="todays-tasks" className="half-panel flex flex-columns centre">                         
+                        <TaskTable 
+                            tasks ={this.props.tasks}                     
+                            tags = {this.props.tags}                      
+                            onDelete = {(task) => this.props.handleDelete(task)}
+                            onUpdate = {(id) => this.props.handleUpdate(id)}   
+                            switchable = {false}
+                            showDate = {false}
+                        />  
+                    </div>
                 </div>
                 <div id="forecast-panel" className="panel flex flex-rows centre forecast tiny-font">
                     {forecastPanel}

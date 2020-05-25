@@ -13,7 +13,7 @@ class SunDisplay extends Component{
     render(){
         const iconClass = this.props.isSunSet ? 'wi wi-sunset' : 'wi wi-sunrise';
         return(
-            <div>
+            <div className="extra-item">
                 <i className={iconClass}></i>
                 <span>{this.props.time}</span>
             </div>

@@ -39,7 +39,7 @@ class TaskTable extends React.Component{
             this.setState({sortOrder: "dsc"});
         }
         else{
-            this.setState({sortOrder: "dsc"});
+            this.setState({sortOrder: "asc"});
         }
     }
     
@@ -115,10 +115,10 @@ class TaskTable extends React.Component{
 
         let toolRowClasses = 'hide';
         const tableClasses = 'table table-striped';
-        let listClasses = 'tiny-font';
+        let listClasses = 'tiny-font fill-width';
 
         if(this.props.switchable){
-            listClasses = this.props.activePanel === "list" ? 'collapse small show tiny-font' : 'collapse small hide tiny-font';
+            listClasses = this.props.activePanel === "list" ? 'collapse small show tiny-font fill-width' : 'collapse small hide tiny-font fill-width';
             toolRowClasses = 'content-panel-table table-tools-row'
         }
 
@@ -128,11 +128,9 @@ class TaskTable extends React.Component{
                 tag = {tag}
                 addTag = {(tag) => this.onAddTag(tag)}
                 removeTag = {(tag) => this.onRemoveTag(tag)}
-                parent = "form"
+                parent = "table"
             />
         )    
-
-
 
         return(
             <div className={listClasses}>
@@ -166,7 +164,7 @@ class TaskTable extends React.Component{
                         
                     </div>
                 </div>        
-                <div className="content-panel-table"> 
+                <div className="flex flex-columns centre"> 
                     <table className={tableClasses}>            
                         <thead>
                             <tr>
@@ -232,7 +230,7 @@ class TaskRow extends React.Component{
                 <td>{this.props.task.name}</td>
                 <td>{this.getTags()}</td>
                 <td>{this.props.task.status}</td>
-                {this.props.showDate ? <td>{this.props.task.due_date}</td> : <td></td>}
+                {this.props.showDate ? <td>{this.props.task.due_date.split('T')[0]}</td> : <td></td>}
                 <td className='button-column'>
                     <button title="start task" className="action-button" type="button" onClick={() => this.doUpateStatus("ongoing")}><FontAwesomeIcon icon={faClock} /></button>
                     <button title="complete task" className="action-button" type="button" onClick={() => this.doUpateStatus("completed")}><FontAwesomeIcon icon={faCheck} /></button>

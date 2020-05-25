@@ -60,10 +60,11 @@ class MoonPhase extends Component{
         const phase = this.getPhase();
         const iconClass = "moon wi " + phase.icon;
 
-        return(
-            <div>
+        return(           
+            <div className="extra-item">
                 <i className={iconClass} title={phase.tooltip}></i>
-            </div>   
+            </div>
+            
         )
     }
 }

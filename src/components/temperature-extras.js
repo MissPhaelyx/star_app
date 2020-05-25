@@ -14,11 +14,11 @@ class TemperatureExtras extends Component{
 
     render(){
         return(
-            <div>
-                <span>Feels like: {this.props.feelsLike}{this.props.tempUnit} &#9830; </span>
-                <span>High: {this.props.temperatureHigh}{this.props.tempUnit} &#9830; </span>
-                <span>Low: {this.props.temperatureLow}{this.props.tempUnit}</span>
-            </div>   
+            <>
+                <div className="extra-item"><label>Feels like</label><span>{this.props.feelsLike}{this.props.tempUnit}</span></div>
+                <div className="extra-item"><label>High</label><span>{this.props.temperatureHigh}{this.props.tempUnit}</span></div>
+                <div className="extra-item"><label>Low</label><span>{this.props.temperatureLow}{this.props.tempUnit}</span></div>
+            </>   
         )
     }
 }

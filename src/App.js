@@ -6,13 +6,7 @@ import TodoScreen from './components/todo-screen';
 import './App.css';
 import './style.css';
 import './weather-icons.min.css';
-import { 
-  getTasks,
-  getTags,
-  getCountryData,
-  getForecast,
-  getWeatherData,
-  getCityData } from "./lib/data";
+import {getTasks,  getTags,  getCountryData,  getForecast,  getWeatherData,  getCityData, createTask, deleteTask, updateTask} from "./lib/data";
 
 class App extends Component{
   constructor(props){
@@ -46,6 +40,10 @@ class App extends Component{
   dataCallback = (data) => {
     this.setState(data);
   }
+
+  agenda = () => {
+    return this.state.tasks.filter(a => a.due_date.indexOf(new Date().toISOString().split('T')[0]) >= 0);
+  };
 
   componentDidMount(){
     getTasks(this.dataCallback);
@@ -97,9 +95,7 @@ class App extends Component{
     var dynamicColour = '#' + hex.substring( 1, 7 );
 
     this.setState({currentDynamicColour: dynamicColour});
-  }
-
-  
+  }  
 
   switchScreen(screenName){
     let previousScreen = this.state.currentScreen;
@@ -159,7 +155,9 @@ class App extends Component{
             dateTime = {this.state.dateTime}            
             show = {this.state.currentScreen === "TODO"}
             switchScreen = {(screenName) => this.switchScreen(screenName)}            
-            handleSubmit={(values) => this.handleSubmit(values)}
+            handleSubmit={(task) => createTask(task, this.dataCallback)}
+            handleUpdate={(task) => updateTask(task, this.dataCallback)}
+            handleDelete={(id) => deleteTask(id, this.dataCallback)}
             tasks ={this.state.tasks}
             tags={this.state.tags}
           />                   
@@ -170,6 +168,10 @@ class App extends Component{
             forecastItems = {this.state.forecastItems}
             show = {this.state.currentScreen === "WEATHER"}
             switchScreen = {(screenName) => this.switchScreen(screenName)}
+            tags={this.state.tags}
+            tasks ={this.agenda()}            
+            handleUpdate={(task) => updateTask(task, this.dataCallback)}
+            handleDelete={(id) => deleteTask(id, this.dataCallback)}
           />
           <ConfigScreen
             config = {this.state.config}

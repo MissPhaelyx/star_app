@@ -45,7 +45,13 @@ i{
 }
 
 .panel{
-    padding: 10px;    
+    padding: 20px;    
+    width: 85VW;
+    max-height: 450px;
+}
+
+.half-panel{
+  width: 50vw;
 }
 
 .centre{
@@ -82,7 +88,7 @@ i{
 }
 
 .large-font{
-    font-size: 1.75em;
+    font-size: 1.5em;
 }
 
 .small-font{
@@ -98,8 +104,8 @@ i{
 }
 
 .forecast{
-    width: 60vw;
-    min-height: 200px;
+    width: 75vw;
+    min-height: 220px;
     overflow-x: hidden;
     justify-content: flex-start;
     overflow-y: hidden;
@@ -191,26 +197,23 @@ i{
     width: 85vw;
   }
 
+  .extra-display{
+    width:100%;
+  }
+
+  .extra-item{
+    padding: 0.5em;
+  }
+
+  .extra-item label{
+    display: block;
+    margin-right: unset;
+    font-style: oblique;
+  }
+
 /* tasks needs redoing props */
-.content-panel-table{ 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .content-panel-table table{
-   
-  }
-  
-  .content-panel-form{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .content-panel-form form{  
-    
-  }
+
+
   
   .form-group label{
     margin-right: 1rem;
@@ -354,3 +357,8 @@ i{
   .hide{
     display: none;
   }
+
+  .fill-width{
+    width: 100%;
+  }
+  
