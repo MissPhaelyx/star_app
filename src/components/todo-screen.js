@@ -68,6 +68,7 @@ class TodoScreen extends Component{
                     onUpdate = {(id) => this.props.handleUpdate(id)}   
                     switchable = {true}
                     showDate = {true}
+                    showHeader = {true}
                 />  
             </div>
         )

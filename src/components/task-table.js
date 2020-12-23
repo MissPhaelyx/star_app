@@ -165,16 +165,18 @@ class TaskTable extends React.Component{
                     </div>
                 </div>        
                 <div className="flex flex-columns centre"> 
-                    <table className={tableClasses}>            
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Tags</th>
-                                <th>Status</th>
-                                {this.props.showDate ? <th>Due <button className="sortButton" onClick={() => this.onSort()}><FontAwesomeIcon icon={this.state.sortOrder === "asc" ? faSortUp : faSortDown} /></button></th> : <td></td>}
-                                <th></th>
-                            </tr>                
-                        </thead>
+                    <table className={tableClasses}>
+                        {this.props.showHeader === true &&         
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Tags</th>
+                                    <th>Status</th>
+                                    {this.props.showDate ? <th>Due <button className="sortButton" onClick={() => this.onSort()}><FontAwesomeIcon icon={this.state.sortOrder === "asc" ? faSortUp : faSortDown} /></button></th> : <td></td>}
+                                    <th></th>
+                                </tr>                
+                            </thead>
+                        }
                         <tbody>        
                             {this.getTaskRows()}
                         </tbody>                            

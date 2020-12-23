@@ -114,6 +114,7 @@ i{
 .forecast-day{
     display: inline-block;
     margin: 5px;
+    min-width: 95px;
 }
 
 .forecast-day span{
@@ -315,7 +316,8 @@ i{
   }
   
   label{
-    margin-right:1rem;
+    margin-right:0.5rem;
+    margin-left:0.5rem;
   }
   
   .tools-wrapper{

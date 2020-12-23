@@ -85,16 +85,19 @@ class WeatherScreen extends Component{
                             />    
                         </div>                 
                     </div>  
-                    <div id="todays-tasks" className="half-panel flex flex-columns centre">                         
-                        <TaskTable 
-                            tasks ={this.props.tasks}                     
-                            tags = {this.props.tags}                      
-                            onDelete = {(task) => this.props.handleDelete(task)}
-                            onUpdate = {(id) => this.props.handleUpdate(id)}   
-                            switchable = {false}
-                            showDate = {false}
-                        />  
-                    </div>
+                    {this.props.tasks.length > 0 &&
+                        <div id="todays-tasks" className="half-panel flex flex-columns centre">                         
+                            <TaskTable 
+                                tasks ={this.props.tasks}                     
+                                tags = {this.props.tags}                      
+                                onDelete = {(task) => this.props.handleDelete(task)}
+                                onUpdate = {(id) => this.props.handleUpdate(id)}   
+                                switchable = {false}
+                                showDate = {false}
+                                showHeader = {false}
+                            />  
+                        </div>
+                    }
                 </div>
                 <div id="forecast-panel" className="panel flex flex-rows centre forecast tiny-font">
                     {forecastPanel}

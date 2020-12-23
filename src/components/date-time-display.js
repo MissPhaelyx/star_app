@@ -6,11 +6,18 @@ class DateTimeDisplay extends Component{
         return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][day];
     }
 
+    dayOfWeekShortString(day){
+        return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][day];
+    }
+
     render(){
         return(
                 <div className='flex flex-columns centre'>
                     {this.props.showDay && 
                         <span>{this.dayOfWeekString(this.props.dateTime.getDay())}</span>
+                    }
+                    {this.props.showShortDate &&
+                        <span>{this.dayOfWeekShortString(this.props.dateTime.getDay()) + ' ' + this.props.dateTime.getDate() + '/' + this.props.dateTime.getMonth()}</span>
                     }
                     {this.props.showDate &&
                         <span>{this.props.dateTime.toLocaleDateString()}</span>

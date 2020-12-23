@@ -12,8 +12,8 @@ class ForecastItem extends Component{
         return(
             <div className='forecast-day'>
                 <DateTimeDisplay
-                    dateTime = {new Date(this.props.weatherData.dateTime*1000)}
-                    showDay = {true}
+                    dateTime = {new Date(this.props.weatherData.dateTime*1000)}                    
+                    showShortDate = {true}
                 /> 
                 <ConditionIcon 
                     conditionId = {this.props.weatherData.conditionId} 
