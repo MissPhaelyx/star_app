@@ -66,6 +66,7 @@ class TodoScreen extends Component{
                     activatePanel = {(panel) => this.activatePanel(panel)}
                     onDelete = {(task) => this.props.handleDelete(task)}
                     onUpdate = {(id) => this.props.handleUpdate(id)}   
+                    onComplete = {(id) => this.props.handleComplete(id)}
                     switchable = {true}
                     showDate = {true}
                     showHeader = {true}

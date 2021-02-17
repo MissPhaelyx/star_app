@@ -2,8 +2,6 @@
 
 import React from 'react';
 
-import { faClock } from "@fortawesome/free-solid-svg-icons"; 
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faSortUp } from "@fortawesome/free-solid-svg-icons";
 import { faSortDown } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +10,8 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Tag, TagCheckBox } from './tag';
+
+import { getDueDateString, getDueDate } from '../lib/util';
 
 class TaskTable extends React.Component{   
 
@@ -27,11 +27,11 @@ class TaskTable extends React.Component{
 
     sortDateDescending(a,b) 
     {
-        return new Date(b.due_date) - new Date(a.due_date);
+        return getDueDate(b) - getDueDate(a);
     }
 
     sortDateAscending(a,b){
-        return new Date(a.due_date) - new Date(b.due_date);
+        return getDueDate(a) - getDueDate(b);
     }    
 
     onSort = (e) =>{
@@ -60,13 +60,13 @@ class TaskTable extends React.Component{
 
     onAddTag = (e) =>{
         var tags = this.state.filterTags;
-        tags.push(e);
+        tags.push(parseInt(e));
         this.setState({filterTags: tags}); 
     }
 
     onRemoveTag = (e) =>{
         var tags = this.state.filterTags;
-        var tagIndex = tags.indexOf(e);
+        var tagIndex = tags.indexOf(parseInt(e));
         if(tagIndex >= 0){
             tags.splice(tagIndex, 1);
         }
@@ -77,19 +77,25 @@ class TaskTable extends React.Component{
         this.props.activatePanel("form");
     }
 
-    getTaskRows(){
-        let tasksClone = this.props.tasks.slice();
+    getTaskTags = (task) => {
+        return this.props.tags.filter(t => task.label_ids.includes(t.id));
+    }
 
-        if(this.state.filterParam !== "All"){
-            tasksClone = tasksClone.filter(a => a.status.indexOf(this.state.filterParam) >= 0);
-        }
+    filterCheck = (taskTags, filterTags) => {
+        return taskTags.some(v => filterTags.includes(v));
+    }
+
+    getTaskRows(){
+        let tasksClone = this.props.tasks.slice();   
+
+        tasksClone = tasksClone.filter(a => getDueDate(a) != null);      
 
         if(this.state.searchParam){
-            tasksClone = tasksClone.filter(a => a.name.includes(this.state.searchParam));
-        }
+            tasksClone = tasksClone.filter(a => a.content.includes(this.state.searchParam));            
+        }        
 
-        if(this.state.filterTags.length){
-            tasksClone = tasksClone.filter(a => (a.tags.filter(value => this.state.filterTags.includes(value))).length > 0);
+        if(this.state.filterTags.length){            
+            tasksClone = tasksClone.filter(a => a.label_ids.some(v => this.state.filterTags.includes(v)));       
         }
 
         if(this.state.sortOrder === "asc"){
@@ -98,14 +104,15 @@ class TaskTable extends React.Component{
         else{
             tasksClone.sort((a,b) => this.sortDateDescending(a,b)); 
         }
-
+        
         return tasksClone.map(task =>         
             <TaskRow 
-                key={task._id} 
+                key={task.id} 
                 task={task}
                 onDelete={(id) => this.props.onDelete(id)}
                 onUpdate={(task) => this.props.onUpdate(task)}
-                tags={task.tags}                
+                onComplete={(id) => this.props.onComplete(id)}
+                tags={this.getTaskTags(task)}                
                 showDate = {this.props.showDate}
             />
         );
@@ -114,7 +121,7 @@ class TaskTable extends React.Component{
     render(){   
 
         let toolRowClasses = 'hide';
-        const tableClasses = 'table table-striped';
+        const tableClasses = 'task-table table table-striped';
         let listClasses = 'tiny-font fill-width';
 
         if(this.props.switchable){
@@ -124,7 +131,7 @@ class TaskTable extends React.Component{
 
         const tagSelectors = this.props.tags.map(tag => 
             <TagCheckBox
-                key = {tag._id}
+                key = {tag.id}
                 tag = {tag}
                 addTag = {(tag) => this.onAddTag(tag)}
                 removeTag = {(tag) => this.onRemoveTag(tag)}
@@ -145,15 +152,6 @@ class TaskTable extends React.Component{
                             </ul>                         
                         </div>
                         <div className="form-group">
-                            <label htmlFor="status-select">Status</label>
-                            <select id="status-select" onChange={(e) => this.onFilter(e)}>
-                                <option value="All">All</option>
-                                <option value="pending">Pending</option>
-                                <option value="ongoing">On going</option>
-                                <option value="completed">Completed</option>
-                            </select> 
-                        </div>
-                        <div className="form-group">
                             <form onSubmit={this.onSearch} onReset={this.onReset}>
                                 <label htmlFor="search-textbox">Search</label>
                                 <input type="text" id="search-textbox" />
@@ -171,7 +169,6 @@ class TaskTable extends React.Component{
                                 <tr>
                                     <th>Name</th>
                                     <th>Tags</th>
-                                    <th>Status</th>
                                     {this.props.showDate ? <th>Due <button className="sortButton" onClick={() => this.onSort()}><FontAwesomeIcon icon={this.state.sortOrder === "asc" ? faSortUp : faSortDown} /></button></th> : <td></td>}
                                     <th></th>
                                 </tr>                
@@ -190,7 +187,7 @@ class TaskTable extends React.Component{
 class TaskRow extends React.Component{
     constructor(props){
         super(props);
-        this.state = this.props.task;         
+        this.state = this.props.task;      
     }
 
     onDelete = (e) =>{
@@ -199,8 +196,8 @@ class TaskRow extends React.Component{
 
     doUpateStatus = (status) =>{
         let task = {
-            "_id": this.state._id,
-            "name": this.state.name,
+            "id": this.state.id,
+            "content": this.state.name,
             "Create_date": this.state.Create_date,
             "tags": this.state.tags,
             "due_date": this.state.due_date,
@@ -212,15 +209,21 @@ class TaskRow extends React.Component{
         this.setState(task);  
     }
 
+    doCompleteTask = () =>{
+        this.props.onComplete(this.state.id);
+    }
+
     getTags = () =>{        
-        if(this.props.tags){
-           return this.props.tags.map((tag, i) => (
+        let tags = this.props.tags;
+        
+        if(tags){
+           return tags.map((tag, i) => (
                 <Tag
                     key = {i}
-                    name = {tag}
+                    name = {tag.name}
                 />
             ));
-        }
+         }
         else{
             return <span>no tags</span>;
         }
@@ -229,14 +232,11 @@ class TaskRow extends React.Component{
     render(){
         return(                       
             <tr>
-                <td>{this.props.task.name}</td>
+                <td>{this.props.task.content}</td>
                 <td>{this.getTags()}</td>
-                <td>{this.props.task.status}</td>
-                {this.props.showDate ? <td>{this.props.task.due_date.split('T')[0]}</td> : <td></td>}
-                <td className='button-column'>
-                    <button title="start task" className="action-button" type="button" onClick={() => this.doUpateStatus("ongoing")}><FontAwesomeIcon icon={faClock} /></button>
-                    <button title="complete task" className="action-button" type="button" onClick={() => this.doUpateStatus("completed")}><FontAwesomeIcon icon={faCheck} /></button>
-                    <button title="delete task" className="action-button" type="button" onClick={() => this.onDelete()}><FontAwesomeIcon icon={faTimes} /></button>
+                {this.props.showDate ? <td>{getDueDateString(this.props.task)}</td> : <td></td>}
+                <td className='button-column'>                    
+                    <button title="complete task" className="action-button" type="button" onClick={() => this.doCompleteTask()}><FontAwesomeIcon icon={faCheck} /></button>
                 </td>
             </tr>
         )

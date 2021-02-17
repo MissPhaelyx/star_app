@@ -6,7 +6,8 @@ import TodoScreen from './components/todo-screen';
 import './App.css';
 import './style.css';
 import './weather-icons.min.css';
-import {getTasks,  getTags,  getCountryData,  getForecast,  getWeatherData,  getCityData, createTask, deleteTask, updateTask} from "./lib/data";
+import {getTasks, getTags,  getForecast,  getWeatherData,  getCityData, createTask, deleteTask, updateTask, completeTask} from "./lib/data";
+import {taskDueToday} from "./lib/util";
 
 class App extends Component{
   constructor(props){
@@ -27,7 +28,8 @@ class App extends Component{
         colourScheme: "2",
         staticColour: '#FF8080',    
         selectedCountry: 'GB' , 
-        selectedCity: "2641181"
+        selectedCity: "2641181",
+        todoistApiKey: "7c95d743262904c73a2687ea70565053ddd988d8"
       },
       dateTime: new Date(),
       dateTimeIntervalId: 0,
@@ -39,17 +41,17 @@ class App extends Component{
 
   dataCallback = (data) => {
     this.setState(data);
-  }
+  };
 
   agenda = () => {
-    return this.state.tasks.filter(a => a.due_date.indexOf(new Date().toISOString().split('T')[0]) >= 0);
+    return this.state.tasks.filter(a => taskDueToday(a));
   };
 
   componentDidMount(){
-    getTasks(this.dataCallback);
-    getTags(this.dataCallback);
-    getCountryData(this.dataCallback);
-    getCityData(this.dataCallback,this.state.config.selectedCountry);
+    getTasks(this.dataCallback, this.state.config.todoistApiKey);
+    getTags(this.dataCallback, this.state.config.todoistApiKey);
+    //getCountryData(this.dataCallback);
+    //getCityData(this.dataCallback,this.state.config.selectedCountry);
     getWeatherData(this.dataCallback,this.state.config.selectedCity);   
 
     setTimeout(() => {
@@ -69,11 +71,17 @@ class App extends Component{
       getForecast(this.dataCallback, this.state.config.selectedCity);
     }, 5400000);
 
+    var todoisIntervalId = setInterval(() => {
+      getTags(this.dataCallback, this.state.config.todoistApiKey);
+      getTasks(this.dataCallback,this.state.config.todoistApiKey);
+    }, 90000);
+
     this.setState(
       {        
         dateTimeIntervalId: dateTimeIntervalId,
         weatherIntervalId: weatherIntervalId,
-        forecastIntervalId: forecastIntervalId
+        forecastIntervalId: forecastIntervalId,
+        todoisIntervalId: todoisIntervalId
       }
     );
   }
@@ -157,7 +165,8 @@ class App extends Component{
             switchScreen = {(screenName) => this.switchScreen(screenName)}            
             handleSubmit={(task) => createTask(task, this.dataCallback)}
             handleUpdate={(task) => updateTask(task, this.dataCallback)}
-            handleDelete={(id) => deleteTask(id, this.dataCallback)}
+            handleDelete={(id) => deleteTask(id, this.dataCallback)}            
+            handleComplete={(id) => completeTask(id, this.dataCallback, this.state.config.todoistApiKey)}
             tasks ={this.state.tasks}
             tags={this.state.tags}
           />                   
@@ -172,6 +181,7 @@ class App extends Component{
             tasks ={this.agenda()}            
             handleUpdate={(task) => updateTask(task, this.dataCallback)}
             handleDelete={(id) => deleteTask(id, this.dataCallback)}
+            handleComplete={(id) => completeTask(id, this.dataCallback, this.state.config.todoistApiKey)}
           />
           <ConfigScreen
             config = {this.state.config}

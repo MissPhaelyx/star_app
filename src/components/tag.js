@@ -33,7 +33,7 @@ class TagCheckBox extends React.Component{
     render(){
         return(                
             <li>
-                <input type="checkbox" name={this.props.tag.name} id={this.tagId()} value={this.props.tag.name} onChange={this.onCheckBoxChanged} />
+                <input type="checkbox" name={this.props.tag.name} id={this.tagId()} value={this.props.tag.id} onChange={this.onCheckBoxChanged} />
                 <label className="tag-label" htmlFor={this.tagId()}><FontAwesomeIcon icon={faTag}/> {this.props.tag.name}</label>
             </li>
         )

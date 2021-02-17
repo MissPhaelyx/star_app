@@ -70,9 +70,14 @@ class ConditionIcon extends Component{
 
         var currentIcon = iconCollection.filter(function(icon){
             return icon.ConditionId === conditionId;
-        })[0];
+        })[0];        
 
-        return currentIcon.DayIcon;
+        if(this.props.showDayIcon){
+            return currentIcon.DayIcon;
+        }
+        else{
+            return currentIcon.NightIcon;
+        }
     }
 
     render(){        

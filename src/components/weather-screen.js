@@ -14,6 +14,7 @@ import TaskTable from './task-table.js';
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {isDay,unixToTimeString} from '../lib/util.js';
 
 class WeatherScreen extends Component{   
 
@@ -37,7 +38,6 @@ class WeatherScreen extends Component{
                     <DateTimeDisplay
                         dateTime = {this.props.dateTime}
                         showDay = {true}
-                        showDate={true}
                     />
                 </div>  
                 <div id="today-panel" className="panel flex flex-rows centre">                    
@@ -45,6 +45,7 @@ class WeatherScreen extends Component{
                         <ConditionIcon 
                             conditionId = {this.props.weatherData.conditionId} 
                             conditionToolTip = {this.props.weatherData.condition}
+                            showDayIcon = {isDay(unixToTimeString(this.props.dateTime), unixToTimeString(this.props.weatherData.sunriseTime), unixToTimeString(this.props.weatherData.sunsetTime))}
                         />                        
                         <TemperatureDisplay
                             temperature = {this.props.weatherData.temp}
@@ -91,7 +92,8 @@ class WeatherScreen extends Component{
                                 tasks ={this.props.tasks}                     
                                 tags = {this.props.tags}                      
                                 onDelete = {(task) => this.props.handleDelete(task)}
-                                onUpdate = {(id) => this.props.handleUpdate(id)}   
+                                onUpdate = {(id) => this.props.handleUpdate(id)}                                   
+                                onComplete = {(id) => this.props.handleComplete(id)}
                                 switchable = {false}
                                 showDate = {false}
                                 showHeader = {false}

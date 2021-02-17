@@ -6,8 +6,10 @@ import WindDisplay from './wind-display.js';
 import TemperatureDisplay from './temperature-display.js';
 import MoonPhase from './moon-phase.js';
 import DateTimeDisplay from './date-time-display.js';
+import {isDay,unixToTimeString} from '../lib/util.js';
 
-class ForecastItem extends Component{   
+class ForecastItem extends Component{        
+
     render(){
         return(
             <div className='forecast-day'>
@@ -17,7 +19,8 @@ class ForecastItem extends Component{
                 /> 
                 <ConditionIcon 
                     conditionId = {this.props.weatherData.conditionId} 
-                    conditionToolTip = {this.props.weatherData.condition}    
+                    conditionToolTip = {this.props.weatherData.condition}                       
+                    showDayIcon = {isDay(unixToTimeString(this.props.weatherData.dateTime), '05:59:59', '17:59:59' )} 
                 />                        
                 <TemperatureDisplay
                     temperature = {this.props.weatherData.temp}
