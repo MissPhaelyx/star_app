@@ -32,6 +32,18 @@ var unixToTimeString = (unixTimeStamp) => {
     return hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 };
 
+var getTimeString = (date) => {    
+    // Hours part from the timestamp
+    var hours = "0" + date.getHours();
+    // Minutes part from the timestamp
+    var minutes = "0" + date.getMinutes();
+    // Seconds part from the timestamp
+    var seconds = "0" + date.getSeconds();
+
+    // Will display time in 10:30:23 format
+    return hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+};
+
 var taskDueToday = (task) => {
     var dueDate = getDueDate(task);
 
@@ -66,8 +78,8 @@ var getDueDateString = (task) => {
     return null;
 };
 
-var isDay = (currentTime, sunrise, sunset) => { 
-    return (currentTime) >= (sunrise) && (currentTime) <= (sunset);             
+var isDay = (currentTime, sunrise, sunset) => {     
+    return ((currentTime) >= (sunrise) && (currentTime) <= (sunset));             
 };
 
-export {removeByAttr, kelvinToCelsius, metresPSToMph, unixToTimeString, getDueDate, getDueDateString, taskDueToday, isDay};
+export {removeByAttr, kelvinToCelsius, metresPSToMph, unixToTimeString, getDueDate, getDueDateString, taskDueToday, isDay, getTimeString};

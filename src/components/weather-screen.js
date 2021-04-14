@@ -14,7 +14,7 @@ import TaskTable from './task-table.js';
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {isDay,unixToTimeString} from '../lib/util.js';
+import {isDay, getTimeString} from '../lib/util.js';
 
 class WeatherScreen extends Component{   
 
@@ -45,7 +45,7 @@ class WeatherScreen extends Component{
                         <ConditionIcon 
                             conditionId = {this.props.weatherData.conditionId} 
                             conditionToolTip = {this.props.weatherData.condition}
-                            showDayIcon = {isDay(unixToTimeString(this.props.dateTime), unixToTimeString(this.props.weatherData.sunriseTime), unixToTimeString(this.props.weatherData.sunsetTime))}
+                            showDayIcon = {isDay(getTimeString(this.props.dateTime), this.props.weatherData.sunriseTime, this.props.weatherData.sunsetTime)}
                         />                        
                         <TemperatureDisplay
                             temperature = {this.props.weatherData.temp}

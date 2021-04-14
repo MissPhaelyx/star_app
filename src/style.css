@@ -6,7 +6,7 @@ body{
 }
 
 i{
-    padding: 5px;
+    padding: 0.35em;
     font-size: 2em;
 }
 
@@ -45,9 +45,10 @@ i{
 }
 
 .panel{
-    padding: 20px;    
+      
     width: 85VW;
     max-height: 450px;
+    margin: 13px 0;
 }
 
 .half-panel{
