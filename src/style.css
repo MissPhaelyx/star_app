@@ -168,7 +168,7 @@ i{
 }
 
 .button{
-    color: #fff;
+    color: #333;
     background: transparent;
     border: 0;
     cursor: pointer;
@@ -235,7 +235,7 @@ i{
   .form-group button{
     border: none;
     background-color:#ff7f50;
-    color:#fff;
+    color:#333;
     padding: 0.5rem;
     width: 10rem;
     margin-left: 1rem;  
@@ -266,7 +266,7 @@ i{
     margin-left: 0.5rem;
     padding:0.5rem;
     border: solid 1px;
-    color:#FFF;
+    color:#333;
     background-color: #cdcdcd;
     cursor: pointer;
     -webkit-user-select: none; /* Safari */        
@@ -399,4 +399,9 @@ i{
   .task-table tbody::-webkit-scrollbar {
     display: none;
   } 
+
+  .tidy-scroll{
+    overflow-y: clip;
+    overflow-x: hidden;
+  }
   

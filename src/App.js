@@ -26,9 +26,9 @@ class App extends Component{
         windSpeedUnit: 'mph',
         pressureUnit: 'hPa',
         colourScheme: "2",
-        staticColour: '#FF8080',    
+        staticColour: '#020c60',    
         selectedCountry: 'GB' , 
-        selectedCity: "2641181",
+        selectedCity: "2641546",
         todoistApiKey: "7c95d743262904c73a2687ea70565053ddd988d8"
       },
       dateTime: new Date(),
@@ -163,7 +163,7 @@ class App extends Component{
             dateTime = {this.state.dateTime}            
             show = {this.state.currentScreen === "TODO"}
             switchScreen = {(screenName) => this.switchScreen(screenName)}            
-            handleSubmit={(task) => createTask(task, this.dataCallback)}
+            handleSubmit={(task) => createTask(task, this.dataCallback, this.state.config.todoistApiKey)}
             handleUpdate={(task) => updateTask(task, this.dataCallback)}
             handleDelete={(id) => deleteTask(id, this.dataCallback)}            
             handleComplete={(id) => completeTask(id, this.dataCallback, this.state.config.todoistApiKey)}

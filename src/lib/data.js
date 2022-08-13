@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 import { kelvinToCelsius, metresPSToMph, unixToTimeString } from "./util";
+import { v4 as uuid } from 'uuid';
 var getTasks = (dataCallback, apiKey) => {
     fetch('https://api.todoist.com/rest/v1/tasks', {
         method: 'GET',
@@ -22,6 +23,21 @@ var getTags = (dataCallback, apiKey) => {
     })
     .then(res => res.json())
     .then((data) => {dataCallback({tags:data});})
+    .catch(console.log);
+};
+
+var createTask = (task, callback, apiKey) => {
+    fetch('https://api.todoist.com/rest/v1/tasks', {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization' : 'Bearer ' + apiKey,
+        'X-Request-ID': uuid()
+    },
+        body: JSON.stringify(task,null,2)
+    })
+    .then(() => getTasks(callback, apiKey))
     .catch(console.log);
 };
 
@@ -109,18 +125,7 @@ var getForecast = (dataCallback, cityId) => {
     });
 };
 
-var createTask = (task, callback) => {
-    fetch('https://phaepeeeye.herokuapp.com/tasks', {
-    method: 'POST',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(task,null,2)
-    })
-    .then(() => getTasks(callback))
-    .catch(console.log);
-};
+
 
 var deleteTask = (id, callback) =>{
     fetch('https://phaepeeeye.herokuapp.com/tasks/'+id, {

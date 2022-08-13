@@ -162,7 +162,7 @@ class TaskTable extends React.Component{
                         
                     </div>
                 </div>        
-                <div className="flex flex-columns centre"> 
+                <div className="flex flex-columns centre tidy-scroll"> 
                     <table className={tableClasses}>
                         {this.props.showHeader === true &&         
                             <thead>

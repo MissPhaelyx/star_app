@@ -9,9 +9,9 @@ class TaskForm extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            name: "",
-            due_date: new Date().toISOString().split('T')[0],  
-            tags: []
+            content: "",
+            due_string:  "",  
+            label_ids: []
         };
     }   
 
@@ -36,40 +36,40 @@ class TaskForm extends React.Component{
         e.preventDefault();
         this.props.onSubmit(this.state);
         this.setState({
-            name: "",
-            due_date: new Date().toISOString().split('T')[0],
-            tags: []
+            content: "",
+            due_string:  "",
+            label_ids: []
         });
     }
 
     onNameChange = (e) =>{
         this.setState({
-            name: e.target.value
+            content: e.target.value
         });
     }
 
     onDueChange = (e) =>{
         this.setState({
-            due_date: e.target.value
+            due_string:  e.target.value,
         });
     }
 
     addTag = (tag) =>{
-        var tags = this.state.tags;
+        var tags = this.state.label_ids;
         tags.push(tag);
         this.setState({
-            tags: tags
+            label_ids: tags
         });
     }
 
     removeTag = (tag) =>{
-        var tags = this.state.tags;
+        var tags = this.state.label_ids;
         var tagIndex = tags.indexOf(tag);
         if(tagIndex >= 0){
             tags.splice(tagIndex, 1);
         }
         this.setState({
-            tags: tags
+            label_ids: tags
         });
     }
 
@@ -90,17 +90,16 @@ class TaskForm extends React.Component{
                             id="taskName"
                             name="name"
                             type="text"                    
-                            value={this.state.name}
+                            value={this.state.content}
                             onChange={this.onNameChange}
                         />
                     </div>
                     <div className="form-group">
                         <label htmlFor="dueDate">Due Date</label>
                         <input
-                            id="due_date"
-                            name="due_date"
-                            type="date"                    
-                            value={this.state.due_date}
+                            id="due_string"
+                            name="due_string"            
+                            value={this.state.due_string}
                             onChange={this.onDueChange}
                             min={minDate}
                         />
