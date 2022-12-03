@@ -35,7 +35,7 @@ class App extends Component{
         staticColour: '#020c60',    
         selectedCountry: 'GB' , 
         selectedCity: "2641546",
-        todoistApiKey: "7c95d743262904c73a2687ea70565053ddd988d8"
+        todoistApiKey: ""
       },
       dateTime: new Date(),
       dateTimeIntervalId: 0,
