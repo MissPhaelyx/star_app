@@ -28,47 +28,60 @@ var getTags = (dataCallback, apiKey) => {
 
 var createTask = (task, callback, apiKey) => {
     fetch('https://api.todoist.com/rest/v1/tasks', {
-    method: 'POST',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization' : 'Bearer ' + apiKey,
-        'X-Request-ID': uuid()
-    },
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer ' + apiKey,
+            'X-Request-ID': uuid()
+            },
+            body: JSON.stringify(task,null,2)
+        })
+        .then(() => getTasks(callback, apiKey))
+        .catch(console.log);
+    };
+
+    var updateTask = (task, callback, apiKey) => {
+        fetch('https://api.todoist.com/rest/v1/tasks/'+ task.id, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + apiKey,
+                'X-Request-ID': uuid()
+            },
         body: JSON.stringify(task,null,2)
-    })
-    .then(() => getTasks(callback, apiKey))
-    .catch(console.log);
-};
+        })
+        .then(() => getTasks(callback, apiKey))
+        .catch(console.log);
+    };
 
-var getCountryData = (dataCallback) => {
-    fetch('https://phaepeeeye.herokuapp.com/countries',{
-        method:'GET'
-    })
-    .then(res => res.json())
-    .then((data) => {dataCallback({countries:data});})
-    .catch(console.log);    
-};
+var getTask = (taskID, dataCallback, apiKey) => {
+    fetch('https://api.todoist.com/rest/v1/tasks/'+ taskID, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer ' + apiKey
+            },
+        })    
+        .then(res => res.json())
+        .then((data) => {dataCallback({currentTask:{id: data.id, content: data.content, due_string:data.due.string, label_ids: data.label_ids, description: data.description}});})
+        .catch(console.log);
+    };
 
-var getCityData = (dataCallback, country) => {
-    fetch('https://phaepeeeye.herokuapp.com/cities?country='+country,{
-        method:'GET'
-    })
-    .then(res => res.json())
-    .then((data) => {
-        dataCallback(
-            {
-                cities:data.map((city) => (
-                {
-                    _id:city._id,
-                    value:city.id,
-                    label:city.name 
-                }))
-            }
-        );
-    })
-    .catch(console.log);    
-};
+var completeTask = (id, callback, apiKey) => {
+    fetch('https://api.todoist.com/rest/v1/tasks/'+id+'/close', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Bearer ' + apiKey,
+            },
+        })
+        .then(() => getTasks(callback, apiKey))
+        .catch(console.log);
+    };
 
 var getWeatherData = (dataCallback, cityId) => {
     fetch('https://api.openweathermap.org/data/2.5/weather?id='+cityId+'&appid=8fd8712cd89f1836f2d4293cd9b2cc01',{
@@ -139,42 +152,16 @@ var deleteTask = (id, callback) =>{
     .catch(console.log);
 };
 
-var updateTask = (task, callback) => {
-    fetch('https://phaepeeeye.herokuapp.com/tasks/'+task._id, {
-    method: 'PUT',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(task,null,2)
-    })
-    .then(() => getTasks(callback))
-    .catch(console.log);
-};
-
-var completeTask = (id, callback, apiKey) => {
-fetch('https://api.todoist.com/rest/v1/tasks/'+id+'/close', {
-    method: 'POST',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization' : 'Bearer ' + apiKey,
-    },
-    })
-    .then(() => getTasks(callback, apiKey))
-    .catch(console.log);
-}
 
 export 
 {
     getTasks,
     getTags,
-    getCountryData,
     getForecast,
     getWeatherData,
-    getCityData,
     createTask,
     deleteTask,
     updateTask,
-    completeTask
+    completeTask,
+    getTask
 };

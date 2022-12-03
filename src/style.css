@@ -106,8 +106,7 @@ i{
 
 .forecast{
     width: 75vw;
-    min-height: 220px;
-    overflow-x: hidden;
+    min-height: 266px;
     justify-content: flex-start;
     overflow-y: hidden;
 }
@@ -222,7 +221,8 @@ i{
   }
   
   .form-group input,
-  .form-group select{
+  .form-group select,
+  .form-group textarea{
     border-width: 2px;
     border-style: solid;
     border-color: #000;
@@ -237,9 +237,10 @@ i{
     background-color:#ff7f50;
     color:#333;
     padding: 0.5rem;
-    width: 10rem;
+    width: 8rem;
     margin-left: 1rem;  
     cursor: pointer;
+    margin-top: 1rem;
   }
   
   .action-button{
@@ -309,8 +310,6 @@ i{
     border: none;
   }
   
-  
-  
   .table-tools-row{
     text-align: left;
     padding: 1rem;
@@ -327,7 +326,8 @@ i{
   }
   
   .tools-wrapper .form-group{
-    margin-left: 2vw;
+    margin-left: 1rem;
+    padding: 1rem;
   }
   
   .tools-wrapper .form-group input,
@@ -403,5 +403,6 @@ i{
   .tidy-scroll{
     overflow-y: clip;
     overflow-x: hidden;
+    justify-content: unset;
   }
   

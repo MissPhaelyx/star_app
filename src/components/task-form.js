@@ -9,13 +9,26 @@ class TaskForm extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            id: 0,
             content: "",
             due_string:  "",  
-            label_ids: []
+            label_ids: [],
+            description: ""
         };
     }   
 
-    getTags = () =>{               
+    static getDerivedStateFromProps(props, state) {
+        if(!props.currentTask){return;}
+        return {
+            id: props.currentTask.id,
+            content: props.currentTask.content,
+            due_string: props.currentTask.due_string,  
+            label_ids: props.currentTask.label_ids,
+            description: props.currentTask.description
+        };
+     }
+
+    getTags(){               
         if(this.props.tags){
            return this.props.tags.map((tag) => (
                 <TagCheckBox
@@ -35,27 +48,20 @@ class TaskForm extends React.Component{
     submitForm = (e) =>{
         e.preventDefault();
         this.props.onSubmit(this.state);
-        this.setState({
-            content: "",
-            due_string:  "",
-            label_ids: []
-        });
     }
 
     onNameChange = (e) =>{
-        this.setState({
-            content: e.target.value
-        });
+        this.setState({content: e.target.value});
+        this.props.currentTask.content = e.target.value;
     }
 
     onDueChange = (e) =>{
-        this.setState({
-            due_string:  e.target.value,
-        });
+        this.setState({due_string: e.target.value});
+        this.props.currentTask.due_string = e.target.value;
     }
 
     addTag = (tag) =>{
-        var tags = this.state.label_ids;
+        let tags = this.state.label_ids;
         tags.push(tag);
         this.setState({
             label_ids: tags
@@ -63,8 +69,8 @@ class TaskForm extends React.Component{
     }
 
     removeTag = (tag) =>{
-        var tags = this.state.label_ids;
-        var tagIndex = tags.indexOf(tag);
+        let tags = this.state.label_ids;
+        let tagIndex = tags.indexOf(tag);
         if(tagIndex >= 0){
             tags.splice(tagIndex, 1);
         }
@@ -103,6 +109,14 @@ class TaskForm extends React.Component{
                             onChange={this.onDueChange}
                             min={minDate}
                         />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="description">Description</label>
+                        <textarea
+                            id="description"
+                            name="description"            
+                            value={this.state.description}
+                        ></textarea>
                     </div>
                     <div className="form-group">
                         <label>Tags</label>

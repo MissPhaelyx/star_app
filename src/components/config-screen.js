@@ -33,27 +33,7 @@ class ConfigScreen extends Component{
             "screen flex flex-columns centre collapse show" :
             "screen flex flex-columns centre collapse hide";
         return(
-            <div id="config-panel" className={panelClass}>
-                <div className="panel flex flex-columns centre min">
-                    <span>Country</span>
-                    <DropDown
-                        id="country-select"
-                        items = {this.props.countries}
-                        selectedValue = {this.props.config.selectedCountry}
-                        handleChange = {(country) => this.onCountryChange(country)}                        
-                        className="dropdown"                     
-                    />
-                </div>
-                <div className="panel flex flex-columns centre min">
-                    <span>City</span>                   
-                    <DropDown
-                        id="city-select"
-                        items = {this.props.cities}      
-                        selectedValue = {this.props.config.selectedCity} 
-                        handleChange = {(country) => this.onCityChange(country)}
-                        className="dropdown"                     
-                    />
-                </div>
+            <div id="config-panel" className={panelClass}>                
                 <div className="panel flex flex-columns centre min">
                     <span>Colour Scheme</span> 
                     <div className="flex flex-rows centre min small-font">

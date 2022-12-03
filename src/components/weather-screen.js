@@ -94,6 +94,7 @@ class WeatherScreen extends Component{
                                 onDelete = {(task) => this.props.handleDelete(task)}
                                 onUpdate = {(id) => this.props.handleUpdate(id)}                                   
                                 onComplete = {(id) => this.props.handleComplete(id)}
+                                onSelected = {(id) => this.props.handleSelect(id)}
                                 switchable = {false}
                                 showDate = {false}
                                 showHeader = {false}

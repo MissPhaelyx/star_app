@@ -6,7 +6,7 @@ import TodoScreen from './components/todo-screen';
 import './App.css';
 import './style.css';
 import './weather-icons.min.css';
-import {getTasks, getTags,  getForecast,  getWeatherData,  getCityData, createTask, deleteTask, updateTask, completeTask} from "./lib/data";
+import {getTasks, getTags, getForecast, getWeatherData, createTask, deleteTask, updateTask, completeTask, getTask} from "./lib/data";
 import {taskDueToday} from "./lib/util";
 
 class App extends Component{
@@ -21,6 +21,12 @@ class App extends Component{
       forecastItems: [],
       tasks: [],
       tags: [],
+      currentTask: {
+        id: 0,
+        content: '',
+        due_string: '',
+        label_ids: []
+      },
       config: {
         tempUnit: '°C',
         windSpeedUnit: 'mph',
@@ -50,8 +56,6 @@ class App extends Component{
   componentDidMount(){
     getTasks(this.dataCallback, this.state.config.todoistApiKey);
     getTags(this.dataCallback, this.state.config.todoistApiKey);
-    //getCountryData(this.dataCallback);
-    //getCityData(this.dataCallback,this.state.config.selectedCountry);
     getWeatherData(this.dataCallback,this.state.config.selectedCity);   
 
     setTimeout(() => {
@@ -127,30 +131,7 @@ class App extends Component{
     this.setState({
       config: config
     });
-  }
-
-  setCountry(country){
-    var config = this.state.config;
-    config.selectedCountry = country.country;
-    config.selectedCity = "";
-    this.setState({
-      config: config
-    });
-    getCityData(this.dataCallback,country.country);
-  }
-
-  setCity(city){
-     var config = this.state.config;
-    config.selectedCity = city.city;
-    this.setState({
-      config: config
-    });
-    getWeatherData(this.dataCallback,city.city);
-    setTimeout(() => {
-      this.getForecast(this.dataCallback,city.city);
-    }, 3000);
-  }
-
+  }  
   render(){
     const backgroundColor = this.state.config.colourScheme === "1" ? this.state.currentDynamicColour : this.state.config.staticColour;
     const containerStyle = { backgroundColor : backgroundColor };
@@ -164,11 +145,13 @@ class App extends Component{
             show = {this.state.currentScreen === "TODO"}
             switchScreen = {(screenName) => this.switchScreen(screenName)}            
             handleSubmit={(task) => createTask(task, this.dataCallback, this.state.config.todoistApiKey)}
-            handleUpdate={(task) => updateTask(task, this.dataCallback)}
+            handleUpdate={(task) => updateTask(task, this.dataCallback, this.state.config.todoistApiKey)}
             handleDelete={(id) => deleteTask(id, this.dataCallback)}            
             handleComplete={(id) => completeTask(id, this.dataCallback, this.state.config.todoistApiKey)}
+            handleSelect={(id) => getTask(id, this.dataCallback, this.state.config.todoistApiKey)}
             tasks ={this.state.tasks}
             tags={this.state.tags}
+            currentTask={this.state.currentTask}
           />                   
           <WeatherScreen
             weatherData = {this.state.weatherData}
@@ -182,6 +165,7 @@ class App extends Component{
             handleUpdate={(task) => updateTask(task, this.dataCallback)}
             handleDelete={(id) => deleteTask(id, this.dataCallback)}
             handleComplete={(id) => completeTask(id, this.dataCallback, this.state.config.todoistApiKey)}
+            handleSelect={(id) => getTask(id, this.dataCallback, this.state.config.todoistApiKey)}
           />
           <ConfigScreen
             config = {this.state.config}

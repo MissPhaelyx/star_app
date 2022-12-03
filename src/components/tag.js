@@ -19,10 +19,10 @@ class TagCheckBox extends React.Component{
    
     onCheckBoxChanged = (e) =>{
         if(e.target.checked){
-            this.props.addTag(e.target.value);
+            this.props.addTag(parseInt(e.target.value));
         }
         else{
-            this.props.removeTag(e.target.value);
+            this.props.removeTag(parseInt(e.target.value));
         }
     }
 

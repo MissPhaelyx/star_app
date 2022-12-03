@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faSortUp } from "@fortawesome/free-solid-svg-icons";
 import { faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -34,7 +35,7 @@ class TaskTable extends React.Component{
         return getDueDate(a) - getDueDate(b);
     }    
 
-    onSort = (e) =>{
+    onSort(e){
         if(this.state.sortOrder === "asc"){
             this.setState({sortOrder: "dsc"});
         }
@@ -43,28 +44,28 @@ class TaskTable extends React.Component{
         }
     }
     
-    onFilter = (e) =>{
+    onFilter(e){
         let filterParam = e.target.value;
         this.setState({filterParam: filterParam});       
-    };
+    }
 
-    onSearch = (e) =>{
+    onSearch(e){
         e.preventDefault();
         let search = e.target[0].value;
         this.setState({searchParam: search}); 
-    };
+    }
 
-    onReset = (e) =>{
+    onReset(e){
         this.setState({searchParam: ""}); 
-    };
+    }
 
-    onAddTag = (e) =>{
+    onAddTag(e){
         var tags = this.state.filterTags;
         tags.push(parseInt(e));
         this.setState({filterTags: tags}); 
     }
 
-    onRemoveTag = (e) =>{
+    onRemoveTag(e){
         var tags = this.state.filterTags;
         var tagIndex = tags.indexOf(parseInt(e));
         if(tagIndex >= 0){
@@ -73,15 +74,21 @@ class TaskTable extends React.Component{
         this.setState({filterTags: tags}); 
     }   
 
-    onAddNew = (e) => {
+    onAddNew(e){
+        this.props.currentTask = {
+            id: 0,
+            content: '',
+            due_string: '',
+            label_ids: []
+          };
         this.props.activatePanel("form");
     }
 
-    getTaskTags = (task) => {
+    getTaskTags(task){
         return this.props.tags.filter(t => task.label_ids.includes(t.id));
     }
 
-    filterCheck = (taskTags, filterTags) => {
+    filterCheck(taskTags, filterTags){
         return taskTags.some(v => filterTags.includes(v));
     }
 
@@ -112,6 +119,7 @@ class TaskTable extends React.Component{
                 onDelete={(id) => this.props.onDelete(id)}
                 onUpdate={(task) => this.props.onUpdate(task)}
                 onComplete={(id) => this.props.onComplete(id)}
+                onSelect={(id) => this.props.onSelected(id)}
                 tags={this.getTaskTags(task)}                
                 showDate = {this.props.showDate}
             />
@@ -213,6 +221,10 @@ class TaskRow extends React.Component{
         this.props.onComplete(this.state.id);
     }
 
+    doSelectTask = () =>{
+        this.props.onSelect(this.state.id);
+    }
+
     getTags = () =>{        
         let tags = this.props.tags;
         
@@ -231,12 +243,13 @@ class TaskRow extends React.Component{
 
     render(){
         return(                       
-            <tr>
+            <tr >
                 <td>{this.props.task.content}</td>
                 <td>{this.getTags()}</td>
                 {this.props.showDate ? <td>{getDueDateString(this.props.task)}</td> : <td></td>}
                 <td className='button-column'>                    
                     <button title="complete task" className="action-button" type="button" onClick={() => this.doCompleteTask()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button title="edit task" className="action-button" type="button" onClick={() => this.doSelectTask()}><FontAwesomeIcon icon={faEdit} /></button>
                 </td>
             </tr>
         )

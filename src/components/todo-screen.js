@@ -13,9 +13,15 @@ class TodoScreen extends Component{
     constructor(props){
         super(props);      
         this.state = {
-            activePanel:"list"
-        }
-    }    
+            activePanel:"list",   
+            currentTask:props.currentTask         
+        };
+    }   
+
+    doSelectTask(id){
+        this.props.handleSelect(id);        
+        this.activatePanel('form');
+    }
 
     activatePanel(panel){
         this.setState({
@@ -23,8 +29,14 @@ class TodoScreen extends Component{
         });
     }
 
-    doSubmit = (task) =>{
-        this.props.handleSubmit(task);
+    doSubmit(){
+        let task = this.props.currentTask;
+        if(task.id === 0){
+            this.props.handleSubmit(task);
+        }
+        else{
+            this.props.handleUpdate(task);
+        }
         this.setState({
             activePanel:"list"
         });
@@ -58,6 +70,7 @@ class TodoScreen extends Component{
                     tags ={this.props.tags}          
                     activePanel = {this.state.activePanel}
                     activatePanel = {(panel) => this.activatePanel(panel)}
+                    currentTask = {this.props.currentTask}
                 />             
                 <TaskTable 
                     tasks ={this.props.tasks}                     
@@ -67,6 +80,7 @@ class TodoScreen extends Component{
                     onDelete = {(task) => this.props.handleDelete(task)}
                     onUpdate = {(id) => this.props.handleUpdate(id)}   
                     onComplete = {(id) => this.props.handleComplete(id)}
+                    onSelected = {(id) => this.doSelectTask(id)}
                     switchable = {true}
                     showDate = {true}
                     showHeader = {true}
