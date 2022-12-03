@@ -109,6 +109,16 @@ class App extends Component{
     this.setState({currentDynamicColour: dynamicColour});
   }  
 
+  setTodoKey(key){
+    var config = this.state.config;
+    config.todoistApiKey = key.key;
+    this.setState({
+      config: config
+    });
+    getTasks(this.dataCallback, this.state.config.todoistApiKey);
+    getTags(this.dataCallback, this.state.config.todoistApiKey);
+  }
+
   switchScreen(screenName){
     let previousScreen = this.state.currentScreen;
     this.setState({
@@ -179,7 +189,7 @@ class App extends Component{
             countries = {this.state.countries}
             cities = {this.state.cities}
             previousScreen = {this.state.previousScreen}
-            setTodokey = {this.state.todoistApiKey}
+            setTodokey = {key => this.setTodoKey(key)}
           />
         </div>
       </div>

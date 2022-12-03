@@ -28,8 +28,7 @@ class ConfigScreen extends Component{
         this.props.setCity({city});
     }
 
-    onTodoKeyChange(key){
-        this.setState({todoist_key:key});
+    onTodoKeyChange(key){     
         this.props.setTodokey({key});
     }
 
@@ -42,9 +41,8 @@ class ConfigScreen extends Component{
                 <div className="panel flex flex-columns centre min">
                     <span>Todoist Key</span>
                     <input  id="todoist_key"
-                            name="todoist_key"            
-                            value={this.state.todoist_key}
-                            onChange={this.onTodoKeyChange} />
+                            name="todoist_key"  
+                            onChange={(key) => this.onTodoKeyChange(key.target.value)} />
                 </div>            
                 <div className="panel flex flex-columns centre min">
                     <span>Colour Scheme</span> 
