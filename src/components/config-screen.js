@@ -28,12 +28,24 @@ class ConfigScreen extends Component{
         this.props.setCity({city});
     }
 
+    onTodoKeyChange(key){
+        this.setState({todoist_key:key});
+        this.props.setTodokey({key});
+    }
+
     render(){
         const panelClass = this.props.show ?
             "screen flex flex-columns centre collapse show" :
             "screen flex flex-columns centre collapse hide";
         return(
-            <div id="config-panel" className={panelClass}>                
+            <div id="config-panel" className={panelClass}>    
+                <div className="panel flex flex-columns centre min">
+                    <span>Todoist Key</span>
+                    <input  id="todoist_key"
+                            name="todoist_key"            
+                            value={this.state.todoist_key}
+                            onChange={this.onTodoKeyChange} />
+                </div>            
                 <div className="panel flex flex-columns centre min">
                     <span>Colour Scheme</span> 
                     <div className="flex flex-rows centre min small-font">

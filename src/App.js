@@ -179,6 +179,7 @@ class App extends Component{
             countries = {this.state.countries}
             cities = {this.state.cities}
             previousScreen = {this.state.previousScreen}
+            setTodokey = {this.state.todoistApiKey}
           />
         </div>
       </div>
