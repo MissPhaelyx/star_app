@@ -2,7 +2,7 @@
 import { kelvinToCelsius, metresPSToMph, unixToTimeString } from "./util";
 import { v4 as uuid } from 'uuid';
 var getTasks = (dataCallback, apiKey) => {
-    fetch('https://api.todoist.com/rest/v1/tasks', {
+    fetch('https://api.todoist.com/rest/v2/tasks', {
         method: 'GET',
         headers: {
             'Authorization' : 'Bearer ' + apiKey
@@ -14,7 +14,7 @@ var getTasks = (dataCallback, apiKey) => {
 };
 
 var getTags = (dataCallback, apiKey) => {
-    fetch('https://api.todoist.com/rest/v1/labels', {
+    fetch('https://api.todoist.com/rest/v2/labels', {
     method: 'GET',
     headers: {
             'Authorization' : 'Bearer ' + apiKey
@@ -27,7 +27,7 @@ var getTags = (dataCallback, apiKey) => {
 };
 
 var createTask = (task, callback, apiKey) => {
-    fetch('https://api.todoist.com/rest/v1/tasks', {
+    fetch('https://api.todoist.com/rest/v2/tasks', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -42,7 +42,7 @@ var createTask = (task, callback, apiKey) => {
     };
 
     var updateTask = (task, callback, apiKey) => {
-        fetch('https://api.todoist.com/rest/v1/tasks/'+ task.id, {
+        fetch('https://api.todoist.com/rest/v2/tasks/'+ task.id, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -57,7 +57,7 @@ var createTask = (task, callback, apiKey) => {
     };
 
 var getTask = (taskID, dataCallback, apiKey) => {
-    fetch('https://api.todoist.com/rest/v1/tasks/'+ taskID, {
+    fetch('https://api.todoist.com/rest/v2/tasks/'+ taskID, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -71,7 +71,7 @@ var getTask = (taskID, dataCallback, apiKey) => {
     };
 
 var completeTask = (id, callback, apiKey) => {
-    fetch('https://api.todoist.com/rest/v1/tasks/'+id+'/close', {
+    fetch('https://api.todoist.com/rest/v2/tasks/'+id+'/close', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
