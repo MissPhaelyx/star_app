@@ -79,13 +79,13 @@ class TaskTable extends React.Component{
             id: 0,
             content: '',
             due_string: '',
-            label_ids: []
+            labels: []
           };
         this.props.activatePanel("form");
     }
 
     getTaskTags(task){
-        return this.props.tags.filter(t => task.label_ids.includes(t.id));
+        return this.props.tags.filter(t => task.labels.includes(t.id));
     }
 
     filterCheck(taskTags, filterTags){
@@ -102,7 +102,7 @@ class TaskTable extends React.Component{
         }        
 
         if(this.state.filterTags.length){            
-            tasksClone = tasksClone.filter(a => a.label_ids.some(v => this.state.filterTags.includes(v)));       
+            tasksClone = tasksClone.filter(a => a.labels.some(v => this.state.filterTags.includes(v)));       
         }
 
         if(this.state.sortOrder === "asc"){

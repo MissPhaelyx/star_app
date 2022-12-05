@@ -25,7 +25,7 @@ class App extends Component{
         id: 0,
         content: '',
         due_string: '',
-        label_ids: []
+        labels: []
       },
       config: {
         tempUnit: '°C',

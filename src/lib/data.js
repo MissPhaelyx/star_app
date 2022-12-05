@@ -66,7 +66,7 @@ var getTask = (taskID, dataCallback, apiKey) => {
             },
         })    
         .then(res => res.json())
-        .then((data) => {dataCallback({currentTask:{id: data.id, content: data.content, due_string:data.due.string, label_ids: data.label_ids, description: data.description}});})
+        .then((data) => {dataCallback({currentTask:{id: data.id, content: data.content, due_string:data.due.string, labels: data.labels, description: data.description}});})
         .catch(console.log);
     };
 

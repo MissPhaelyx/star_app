@@ -12,7 +12,7 @@ class TaskForm extends React.Component{
             id: 0,
             content: "",
             due_string:  "",  
-            label_ids: [],
+            labels: [],
             description: ""
         };
     }   
@@ -23,7 +23,7 @@ class TaskForm extends React.Component{
             id: props.currentTask.id,
             content: props.currentTask.content,
             due_string: props.currentTask.due_string,  
-            label_ids: props.currentTask.label_ids,
+            labels: props.currentTask.labels,
             description: props.currentTask.description
         };
      }
@@ -61,21 +61,21 @@ class TaskForm extends React.Component{
     }
 
     addTag = (tag) =>{
-        let tags = this.state.label_ids;
+        let tags = this.state.labels;
         tags.push(tag);
         this.setState({
-            label_ids: tags
+            labels: tags
         });
     }
 
     removeTag = (tag) =>{
-        let tags = this.state.label_ids;
+        let tags = this.state.labels;
         let tagIndex = tags.indexOf(tag);
         if(tagIndex >= 0){
             tags.splice(tagIndex, 1);
         }
         this.setState({
-            label_ids: tags
+            labels: tags
         });
     }
 
