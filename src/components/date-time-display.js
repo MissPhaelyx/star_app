@@ -14,7 +14,7 @@ class DateTimeDisplay extends Component{
         return(
                 <div className='flex flex-columns centre'>
                     {this.props.showDay && 
-                        <a href="https://www.solitr.com/"><span>{this.dayOfWeekString(this.props.dateTime.getDay())}</span></a>
+                        <a href="https://www.solitr.com/" target="_blank" rel="noreferrer"><span>{this.dayOfWeekString(this.props.dateTime.getDay())}</span></a>
                     }
                     {this.props.showShortDate &&
                         <span>{this.dayOfWeekShortString(this.props.dateTime.getDay()) + ' ' + this.props.dateTime.getDate() + '/' + this.props.dateTime.getMonth()}</span>

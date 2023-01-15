@@ -10,6 +10,10 @@ i{
     font-size: 2em;
 }
 
+a{
+  colour: #fff;
+}
+
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
