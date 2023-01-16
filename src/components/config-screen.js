@@ -39,7 +39,7 @@ class ConfigScreen extends Component{
         return(
             <div id="config-panel" className={panelClass}>    
                 <div className="panel flex flex-columns centre min">
-                    <span>Todoist Key</span>
+                    <a href="https://todoist.com/app/settings/integrations/developer" target="_blank" rel="noreferrer"><span>Todoist Key</span></a>
                     <input  id="todoist_key"
                             name="todoist_key"  
                             onChange={(key) => this.onTodoKeyChange(key.target.value)} />
