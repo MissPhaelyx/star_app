@@ -152,6 +152,14 @@ var deleteTask = (id, callback) =>{
     .catch(console.log);
 };
 
+var getConfig = (callback) =>{   
+    callback({config: localStorage.getItem("StarConfig")});
+};
+
+var setConfig = (config) => {
+    localStorage.setItem("StarConfig", config);
+};
+
 
 export 
 {

@@ -6,7 +6,7 @@ import TodoScreen from './components/todo-screen';
 import './App.css';
 import './style.css';
 import './weather-icons.min.css';
-import {getTasks, getTags, getForecast, getWeatherData, createTask, deleteTask, updateTask, completeTask, getTask} from "./lib/data";
+import {getTasks, getTags, getForecast, getWeatherData, createTask, deleteTask, updateTask, completeTask, getTask, getConfig, setConfig} from "./lib/data";
 import {taskDueToday} from "./lib/util";
 
 class App extends Component{
@@ -56,7 +56,8 @@ class App extends Component{
   componentDidMount(){
     getTasks(this.dataCallback, this.state.config.todoistApiKey);
     getTags(this.dataCallback, this.state.config.todoistApiKey);
-    getWeatherData(this.dataCallback,this.state.config.selectedCity);   
+    getWeatherData(this.dataCallback,this.state.config.selectedCity);  
+    getConfig(this.dataCallback); 
 
     setTimeout(() => {
       getForecast(this.dataCallback,this.state.config.selectedCity);
@@ -115,6 +116,8 @@ class App extends Component{
     this.setState({
       config: config
     });
+
+    setConfig(this.state.config);
     getTasks(this.dataCallback, this.state.config.todoistApiKey);
     getTags(this.dataCallback, this.state.config.todoistApiKey);
   }
@@ -133,6 +136,7 @@ class App extends Component{
     this.setState({
       config: config
     });
+    setConfig(this.state.config);
   }
 
   setStaticColour(colour){
@@ -141,6 +145,7 @@ class App extends Component{
     this.setState({
       config: config
     });
+    setConfig(this.state.config);
   }  
   render(){
     const backgroundColor = this.state.config.colourScheme === "1" ? this.state.currentDynamicColour : this.state.config.staticColour;

@@ -18,16 +18,6 @@ class ConfigScreen extends Component{
         this.props.setStaticColour(colour);
     }
 
-    onCountryChange(country){
-        this.setState({selectedCountry:country});
-        this.props.setCountry({country});
-    }
-
-    onCityChange(city){
-        this.setState({selecteCity:city});
-        this.props.setCity({city});
-    }
-
     onTodoKeyChange(key){     
         this.props.setTodokey({key});
     }
