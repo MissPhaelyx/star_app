@@ -57,7 +57,7 @@ class App extends Component{
     getTasks(this.dataCallback, this.state.config.todoistApiKey);
     getTags(this.dataCallback, this.state.config.todoistApiKey);
     getWeatherData(this.dataCallback,this.state.config.selectedCity);  
-    getConfig(this.dataCallback); 
+     
 
     setTimeout(() => {
       getForecast(this.dataCallback,this.state.config.selectedCity);
@@ -115,9 +115,7 @@ class App extends Component{
     config.todoistApiKey = key.key;
     this.setState({
       config: config
-    });
-
-    setConfig(this.state.config);
+    });    
     getTasks(this.dataCallback, this.state.config.todoistApiKey);
     getTags(this.dataCallback, this.state.config.todoistApiKey);
   }
@@ -136,7 +134,6 @@ class App extends Component{
     this.setState({
       config: config
     });
-    setConfig(this.state.config);
   }
 
   setStaticColour(colour){
@@ -145,7 +142,6 @@ class App extends Component{
     this.setState({
       config: config
     });
-    setConfig(this.state.config);
   }  
   render(){
     const backgroundColor = this.state.config.colourScheme === "1" ? this.state.currentDynamicColour : this.state.config.staticColour;
