@@ -171,5 +171,7 @@ export
     deleteTask,
     updateTask,
     completeTask,
-    getTask
+    getTask,
+    getConfig,
+    setConfig
 };
