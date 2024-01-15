@@ -32,7 +32,7 @@ class App extends Component{
         windSpeedUnit: 'mph',
         pressureUnit: 'hPa',
         colourScheme: "2",
-        staticColour: '#020c60',    
+        staticColour: '#FC9483',    
         selectedCountry: 'GB' , 
         selectedCity: "2641546",
         todoistApiKey: ""
