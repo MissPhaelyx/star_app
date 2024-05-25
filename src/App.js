@@ -6,12 +6,13 @@ import TodoScreen from './components/todo-screen';
 import './App.css';
 import './style.css';
 import './weather-icons.min.css';
-import {getTasks, getTags, getForecast, getWeatherData, createTask, deleteTask, updateTask, completeTask, getTask, getConfig, setConfig} from "./lib/data";
+import {getTasks, getTags, getForecast, getWeatherData, createTask, deleteTask, updateTask, completeTask, getTask, getConfig, saveConfig} from "./lib/data.tsx";
 import {taskDueToday} from "./lib/util";
+import {Config} from "./lib/config.tsx";
 
 class App extends Component{
   constructor(props){
-    super(props);
+    super(props);    
     this.state = {
       currentScreen : 'WEATHER',
       previousScreen: '',
@@ -27,16 +28,7 @@ class App extends Component{
         due_string: '',
         labels: []
       },
-      config: {
-        tempUnit: '°C',
-        windSpeedUnit: 'mph',
-        pressureUnit: 'hPa',
-        colourScheme: "2",
-        staticColour: '#FC9483',    
-        selectedCountry: 'GB' , 
-        selectedCity: "2641546",
-        todoistApiKey: ""
-      },
+      config:{},
       dateTime: new Date(),
       dateTimeIntervalId: 0,
       weatherIntervalId: 0,
@@ -52,12 +44,11 @@ class App extends Component{
   agenda = () => {
     return this.state.tasks.filter(a => taskDueToday(a));
   };
-
-  componentDidMount(){
+  
+  initaliseData(){
     getTasks(this.dataCallback, this.state.config.todoistApiKey);
     getTags(this.dataCallback, this.state.config.todoistApiKey);
-    getWeatherData(this.dataCallback,this.state.config.selectedCity);  
-     
+    getWeatherData(this.dataCallback, this.state.config.selectedCity);
 
     setTimeout(() => {
       getForecast(this.dataCallback,this.state.config.selectedCity);
@@ -81,6 +72,8 @@ class App extends Component{
       getTasks(this.dataCallback,this.state.config.todoistApiKey);
     }, 90000);
 
+
+
     this.setState(
       {        
         dateTimeIntervalId: dateTimeIntervalId,
@@ -90,6 +83,14 @@ class App extends Component{
       }
     );
   }
+
+  componentDidMount(){
+    getConfig().then((configData) =>{
+      this.setState({config: configData});
+      this.initaliseData();
+      saveConfig(configData);
+    }
+  )}
 
   setDynamicColour(){
     var date = this.state.dateTime;
@@ -143,6 +144,11 @@ class App extends Component{
       config: config
     });
   }  
+
+  setConfig(){
+    saveConfig(this.state.config);
+  }
+
   render(){
     const backgroundColor = this.state.config.colourScheme === "1" ? this.state.currentDynamicColour : this.state.config.staticColour;
     const containerStyle = { backgroundColor : backgroundColor };
@@ -178,8 +184,8 @@ class App extends Component{
             handleComplete={(id) => completeTask(id, this.dataCallback, this.state.config.todoistApiKey)}
             handleSelect={(id) => getTask(id, this.dataCallback, this.state.config.todoistApiKey)}
           />
-          <ConfigScreen
-            config = {this.state.config}
+          <ConfigScreen      
+            config = {getConfig()}   
             dateTime = {this.state.dateTime}
             show = {this.state.currentScreen === "CONFIG"}
             switchScreen = {(screenName) => this.switchScreen(screenName)}
@@ -191,6 +197,7 @@ class App extends Component{
             cities = {this.state.cities}
             previousScreen = {this.state.previousScreen}
             setTodokey = {key => this.setTodoKey(key)}
+            setConfig = {() => this.setConfig()} 
           />
         </div>
       </div>
